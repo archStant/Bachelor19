@@ -1,6 +1,6 @@
 # Synopsis:
 ## Arbejdstitel:
-Neural-network factory
+Analyzing protein structures sequences with Deep Neural Networks.
 ## Formål:
 At redegøre for det teoretiske grundlag for kunstige neurale netværk, og lave et program der givet visse parametre implementerer et neuralt netværk. 
 ## Baggrund/motivation:
