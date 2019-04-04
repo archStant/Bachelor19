@@ -27,35 +27,57 @@ aforementioned structures of proteins folding.
 
 Analogously, or rather, digitally, we can use this model to construct an \textit{artificial 
 neural network}.
-
 These set themselves apart from biological neural networks in a couple of ways: most urgently in that while neurons in biological neural networks are connected to each other via synapses, so that each neuron has an either inhibitory or activating effect on whether or not a connected neuron 'fires', in artificial neural networks neurons are connected by \textit{edges}, each with an associated \textit{weight}, allowing the artificial networks to leave the discrete domain and enter the continuous.
-\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=0.4cm,y=0.4cm]
-\clip(-3.84,0.01) rectangle (18.8,18.55);
-\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,7) circle (0.4cm);
-\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,10) circle (0.4cm);
-\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,4) circle (0.4cm);
-\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,7) circle (0.4cm);
-\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,10) circle (0.4cm);
-\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,13) circle (0.4cm);
-\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,10) circle (0.4cm);
-\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,7) circle (0.4cm);
-\draw [line width=1pt] (3,10)-- (6,13);
-\draw [line width=1pt] (3,10)-- (6,10);
-\draw [line width=1pt] (3,10)-- (6,7);
-\draw [line width=1pt] (3,10)-- (6,4);
-\draw [line width=1pt] (3,7)-- (6,13);
-\draw [line width=1pt] (3,7)-- (6,10);
-\draw [line width=1pt] (3,7)-- (6,7);
-\draw [line width=1pt] (3,7)-- (6,4);
-\draw [line width=1pt] (8,13)-- (11,10);
-\draw [line width=1pt] (8,10)-- (11,10);
-\draw [line width=1pt] (8,7)-- (11,10);
-\draw [line width=1pt] (8,4)-- (11,10);
-\draw [line width=1pt] (8,4)-- (11,7);
-\draw [line width=1pt] (11,7)-- (8,7);
-\draw [line width=1pt] (8,10)-- (11,7);
-\draw [line width=1pt] (11,7)-- (8,13);
-\end{tikzpicture}
+
+\subsubsection{Basics}
+An artificial neural network is a specific instantiation of a \textit{multi-layer perceptron}.
+A multi-layer perceptron in turn is a system of nodes arranged into layers and each receiving their value from the value of the nodes in the layer before them (adjusted by some weight) in combination with a bias (a scalar) and an activation function of some sort. \\
+In this way the first layer will be called the \textit{input layer}, the last layer the \textit{output layer} and all layers in between \textit{hidden layers}. \\
+In the case of neural networks, the nodes in the system are referred to as neurons.
+Thus, if one was to describe it more precisely, the value $z_i$ of neuron layer \textit{i} with \textit{d} number of neurons in it, given the matrix of sets of weights \textit{w} (the biases being the very first row) and the activation function $h()$ can be expressed as follows:
+\[
+z_i = h\left(\sum_{j=0}^d w_{ij}\cdot z_{i-1} + w_{i0}\right)
+\]
+Such a model is useful for classification purposes. A common example is the MNIST data set of hand-written digits in 28x28 pixel greyscale images. In this case the light intensity of the 784 ($28^2$) pixels could fittingly be the input layer, while a layer consisting of 10 nodes (corresponding to digits 0 through 9) could be the output layer, such that the system could be used to predict which digit is written in a given image.
+\begin{figure}[h]
+  \centering
+  \frame{\includegraphics[width=0.7\linewidth]{images/mnist}}
+  \caption{Handwritten digits in the MNIST data set.}
+\end{figure}
+A common implementation of a neural network to perform this task is to have a single hidden layer of 800 nodes, however the most successful implementations in regards to the MNIST data set have been made with \textit{convolutional neural networks}, but we shall return to these later.
+
+\subsection*{Training}
+Simply having defined the system of the neural network as above naturally does not give us a reliable method for classifying, as the accuracy of the prediction inherently depends on the correctness of the weights and biases of the system, which must be initialized with random values. 
+Enter a rather nifty idea named \textit{backpropagation}. Having a set of predicted values for a data set along with the observed correct values, one can establish a \textit{loss} by applying a loss function (which we shall elaborate on later), but which can be as straightforward as a simple difference. Now, backpropagation refers to the practice of essentially taking the derivative of the loss function in regards to the matrix of weights and biases, thereby calculating a \textit{gradient} of these values with respect to the accuracy of the system.\\
+In laymans terms, by doing this one gets a matrix of 'change your weights by this value to increase prediction accuracy', which one can then multiply by a learning rate scalar and subtract from the network weights.
+%
+%\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=0.4cm,y=0.4cm]
+%\clip(-3.84,0.01) rectangle (18.8,18.55);
+%\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,7) circle (0.4cm);
+%\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,10) circle (0.4cm);
+%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,4) circle (0.4cm);
+%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,7) circle (0.4cm);
+%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,10) circle (0.4cm);
+%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,13) circle (0.4cm);
+%\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,10) circle (0.4cm);
+%\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,7) circle (0.4cm);
+%\draw [line width=1pt] (3,10)-- (6,13);
+%\draw [line width=1pt] (3,10)-- (6,10);
+%\draw [line width=1pt] (3,10)-- (6,7);
+%\draw [line width=1pt] (3,10)-- (6,4);
+%\draw [line width=1pt] (3,7)-- (6,13);
+%\draw [line width=1pt] (3,7)-- (6,10);
+%\draw [line width=1pt] (3,7)-- (6,7);
+%\draw [line width=1pt] (3,7)-- (6,4);
+%\draw [line width=1pt] (8,13)-- (11,10);
+%\draw [line width=1pt] (8,10)-- (11,10);
+%\draw [line width=1pt] (8,7)-- (11,10);
+%\draw [line width=1pt] (8,4)-- (11,10);
+%\draw [line width=1pt] (8,4)-- (11,7);
+%\draw [line width=1pt] (11,7)-- (8,7);
+%\draw [line width=1pt] (8,10)-- (11,7);
+%\draw [line width=1pt] (11,7)-- (8,13);
+%\end{tikzpicture}
 
 \subsubsection{Convolutional neural networks}
 \subsubsection{Multitask learning}
