@@ -38,7 +38,7 @@ Thus, if one was to describe it more precisely, the value $z_i$ of neuron layer 
 \[
 z_i = h\left(\sum_{j=0}^d w_{ij}\cdot z_{i-1} + w_{i0}\right)
 \]
-Such a model is useful for classification purposes. A common example is the MNIST data set of hand-written digits in 28x28 pixel greyscale images. In this case the light intensity of the 784 ($28^2$) pixels could fittingly be the input layer, while a layer consisting of 10 nodes (corresponding to digits 0 through 9) could be the output layer, such that the system could be used to predict which digit is written in a given image.
+Such a model is useful for calculating continuous values as well as for classification purposes. A common example of the latter is the MNIST data set of hand-written digits in 28x28 pixel greyscale images. In this case the light intensity of the 784 ($28^2$) pixels could fittingly be the input layer, while a layer consisting of 10 nodes (corresponding to digits 0 through 9) could be the output layer, such that the system could be used to predict which digit is written in a given image.
 \begin{figure}[h]
   \centering
   \frame{\includegraphics[width=0.7\linewidth]{images/mnist}}
@@ -46,10 +46,11 @@ Such a model is useful for classification purposes. A common example is the MNIS
 \end{figure}
 A common implementation of a neural network to perform this task is to have a single hidden layer of 800 nodes, however the most successful implementations in regards to the MNIST data set have been made with \textit{convolutional neural networks}, but we shall return to these later.
 
-\subsection*{Training}
-Simply having defined the system of the neural network as above naturally does not give us a reliable method for classifying, as the accuracy of the prediction inherently depends on the correctness of the weights and biases of the system, which must be initialized with random values. 
-Enter a rather nifty idea named \textit{backpropagation}. Having a set of predicted values for a data set along with the observed correct values, one can establish a \textit{loss} by applying a loss function (which we shall elaborate on later), but which can be as straightforward as a simple difference. Now, backpropagation refers to the practice of essentially taking the derivative of the loss function in regards to the matrix of weights and biases, thereby calculating a \textit{gradient} of these values with respect to the accuracy of the system.\\
-In laymans terms, by doing this one gets a matrix of 'change your weights by this value to increase prediction accuracy', which one can then multiply by a learning rate scalar and subtract from the network weights.
+\subsubsection{Training}
+Simply having defined the system of the neural network as above (denoted $f_{NN}$) naturally does not give us a reliable method for classifying, as the accuracy of the prediction inherently depends on the correctness of the weights and biases of the system (denoted $\Theta$), which must be initialized with random values. \\
+Enter a rather nifty idea named \textit{backpropagation}. Having a set of predicted values ($\hat{y}$) for a data set (\textit{x}) along with the observed correct values (\textit{y}), one can establish a \textit{loss} by applying a loss function (that we shall elaborate on later), but which can be as straightforward as a root mean square error. We shall denote this loss function $l(\hat{y},y)$, so that the  total loss of the system when applied to data set \textit{x} is $l(f_{NN}(\Theta, x), \hat{y})$.\\
+Now backpropagation refers to the practice of essentially taking the derivative of the loss function in regards to the matrix of weights and biases, thereby calculating a \textit{gradient} $\nabla{l(f_{NN}(\Theta, x), \hat{y})}$ of these values with respect to the accuracy of the system, and then adjusting the weights and biases by the gradient multiplied by a learning rate scalar.\\
+In laymans terms, by doing this one gets a matrix of 'change your weights by this and that much in this and that direction to increase prediction accuracy'.
 %
 %\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=0.4cm,y=0.4cm]
 %\clip(-3.84,0.01) rectangle (18.8,18.55);
@@ -80,4 +81,32 @@ In laymans terms, by doing this one gets a matrix of 'change your weights by thi
 %\end{tikzpicture}
 
 \subsubsection{Convolutional neural networks}
+Before talking about convolutional neural networks, we have to specify what a convolution is. Again the MNIST data set serves as an obvious example.\\
+One can understand each of the images in the data set as a matrix of $26\times26$ values in the range of 0 - 255. The formal definition of a convolution is \emph{TODO}, however the more practical explanation is that it is the resulting matrix of the product of a matrix and a filter. For example if one has the matrix $a$ and the filter $f$:
+\[
+a = \begin{bmatrix}
+       2 & 3 & 4           \\[0.3em]
+       1 & 2 & 3 \\[0.3em]
+       0 & 1 & 2
+     \end{bmatrix}
+\hspace*{1cm}
+f = \begin{bmatrix}
+       0 & 1 & 0           \\[0.3em]
+       1 & 1 & 1 \\[0.3em]
+       0 & 1 & 0
+     \end{bmatrix}     
+\]
+the result of convolving $a$ over $f$ would be:
 \subsubsection{Multitask learning}
+
+
+
+
+
+
+
+
+
+
+
+
