@@ -1,0 +1,1 @@
+texmaker *.tex & disown

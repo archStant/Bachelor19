@@ -1,1 +1,49 @@
 \section{Methods}
+
+\subsection{Dataset}
+\subsubsection{Ophav}
+Hvor har vi dette datasæt fra, og hvem har lavet det?
+
+\subsubsection{Features}
+Skrive noget om hvad vores datasæt er og hvordan det er sat op. Dvs. hvilke egenskaber er der, hvordan er de encoded (one-hot vs. binært (solvent)) og hvorvidt vi bruger dem til noget. Fortæl også om at strukturerne her er encoded som de 8 substrukturer og ikke de 3 grupperinger af strukturer.
+
+\subsubsection{Opdeling i træning, test og validering}
+Fortæl om at vi har rigtigt meget træningsdata og hhv. 255 og 236 værdier i test og validering. Vi træner og backpropagerer over træningssættet, holder øje med valideringssættet (og træffer vores beslutninger ud fra det) og udsætter kun modellen for testsættet til sidst.
+
+\subsection{Tools}
+\subsubsection{Math}
+Gennemgå at vi bruger konvolutioner, Binary Cross Entropy loss, ReLU og Softmax (formler for de tre). ((overvej om det skal i et andet afsnit))
+
+\subsubsection{Tech}
+Skrive om pyTorch - herunder dets værktøjer til automatisk at skabe lag af neuroner samt backpropagation. 
+
+Derudover laver vi vores præcisionsberegninger i numpy.
+
+Vores træning er lavet i jupyter notebooks på en Dell-computer med en i7 processor, 16GB RAM og en Nvidia GeForce GTX 1050 GPU med 4GB RAM.
+
+\subsection{Predicting secondary structures alone}
+Fortælle om hvordan vi byggede vores single-model (convolutionelle lag, ReLU, softmax, BCELoss, padding).
+
+\subsubsection{Beregning af præcision}
+Forklar at det vi tæller er antallet af korrekte forudsigelser over antal af faktiske aminosyrer. Gennemgå herunder matematikken i at vi kollapser fra one-hot til classification, og så kører vores mask-magi på det.
+
+\subsection{Implementing multitask learning}
+\subsubsection{Generelt om Multi-task learning}
+Start med refleksioner over hvordan vi bruger shared-parameters i vores model, og forklar at vi stadig kører udelukkende konvolutionelle lag igennem modellen.
+\subsubsection{Opbygningen af vores model}
+Fortæl om opbygningen af vores model - dvs. at vi ReLU'er hele vejen igennem, undtagen sidste lag, og så hvordan vi splitter dataen ud for så at ReLU'e og softmax'e sekundærstrukturerne, medens at vi afrunder solvent-egenskaberne.
+
+\subsubsection{Træning}
+Fortæl hvordan vi udregner loss på vores model, dvs. at vi udregner tre losses; sekundærstruktur, relativ solvency og absolut solvency. Vi bruger BCE på dem alle sammen, så redegør hvorfor vi godt kan det på solvent også.
+
+\subsubsection{Beregning af præcision}
+Forklar hvordan vi til strukturerne bruger samme beregning som ovenfor, mens vi gør næsten det samme for solvent egenskaberne (men hver for sig).
+
+\subsection{Hyperparametre}
+Fortæl at vi i projektet vil prøve at iterere over forskellige hhv. lagstørrelser, antal lag, kernelsizes, og learning rate.
+Forklar at vi vil starte med at tage udgangspunkt i de værdier som Xi bruger, og så iterere lidt frem og tilbage over dem.
+
+
+
+
+
