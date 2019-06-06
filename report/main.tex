@@ -11,13 +11,23 @@
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 %\usepackage{biblatex} %Imports biblatex package
 
-\author{Rasmus og Roald}
-\title{Bachelorproject 2019}
+\usepackage{fancyhdr}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Bachelorproject 2019}
+\lhead{Analyzing protein sequences with Deep Neural Networks}
+\cfoot{\thepage}
+
+\author{Rasmus Porse Bjørneskov\\Roald Frej Vitus Simonsen}
+\title{Analyzing protein sequences with Deep Neural Networks} 
 \begin{document}
 \definecolor{qqttcc}{rgb}{0,0.2,0.8}
 \definecolor{qqffqq}{rgb}{0,1,0}
 \definecolor{ffqqqq}{rgb}{1,0,0}
 \maketitle
+\input{abstract}
+\tableofcontents
 \input{introduction}
 \input{methods}
 \input{results}
