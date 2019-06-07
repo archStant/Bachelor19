@@ -1,10 +1,15 @@
-\documentclass[10pt,a4paper,twocolumn]{article}
+\documentclass[12pt,a4paper]{article} %,twocolumn
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{multicol, caption}
+\usepackage{wrapfig}
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
 \usepackage{listings}
 \input{listing_setup}
 \usepackage{pgf,tikz,pgfplots}
@@ -30,7 +35,10 @@
 \definecolor{ffqqqq}{rgb}{1,0,0}
 \maketitle
 \input{abstract}
+\newpage
 \tableofcontents
+\newpage
+\begin{multicols}{2}
 \input{introduction}
 \input{methods}
 \input{results}
@@ -39,5 +47,5 @@
 
 \bibliography{sample} 
 \bibliographystyle{apalike}
-
+\end{multicols}
 \end{document}

@@ -27,11 +27,23 @@ Sigmoid functions are a specific variant of logistic functions, and serve to map
 Sigmoid(x) = \frac{1}{1 + e^{-x}} = \frac{e^x}{e^x +1}
 \]
 
-\begin{figure}[h]
-  \centering
-  \frame{\includegraphics[width=\linewidth]{../graphs/activation}}
-  \caption{The sigmoid and rectifier activation functions}
-\end{figure}
+\begin{Figure}
+ \centering
+ \includegraphics[width=\linewidth]{../graphs/activation.png}
+ \captionof{figure}{The sigmoid and rectifier activation functions}
+\end{Figure}
+
+%\begin{wrapfigure}{I}{\linewidth}
+%\centering
+%\includegraphics[width=\linewidth]{../graphs/activation.png}
+%\caption{This is the former Share\LaTeX{} logo}
+%\end{wrapfigure}
+
+%\begin{figure}[h]
+%  \centering
+%  \frame{\includegraphics[width=\textwidth]{../graphs/activation}}
+%  \caption{The sigmoid and rectifier activation functions}
+%\end{figure}
 
 \paragraph{Softmax}
 The softmax function ($\sigma$) does very much the same as the sigmoid, only for a range of values. In other words, a set of non-normalized values (that is: of arbitrary length and spread) can via softmax be mapped to a probability distribution over that set. This means that all the values $x_i$ are in the range $0\leq x_i \leq 1$, and that they sum to 1.
@@ -43,11 +55,16 @@ $$
 \sigma(x_i) = \frac{e^{x_i}}{\sum_{j=1} e^{x_j}}
 $$
 
-\begin{figure}[h]
-  \centering
-  \frame{\includegraphics[width=\linewidth]{../graphs/softmax}}
-  \caption{Example data softmaxed}
-\end{figure}
+\begin{Figure}
+ \centering
+ \includegraphics[width=\linewidth]{../graphs/softmax}
+ \captionof{figure}{Example data softmaxed}
+\end{Figure}
+%\begin{figure}[h]
+%  \centering
+%  \frame{\includegraphics[width=\linewidth]{../graphs/softmax}}
+%  \caption{Example data softmaxed}
+%\end{figure}
 
 
 \paragraph{Cross Entropy Loss}
@@ -90,7 +107,7 @@ optimizer.zero_grad()
 loss.backward()
 optimizer.step()
 \end{lstlisting}
-In terms of performing the calculations, all of our training of the model was done on a Dell PC with a 7th gen 8-cores Intel Core i7 CPU, 16GB of RAM and a Nvidia GeForce GTX 1050TI GPU with 4GB of RAM and 768 cores running Linux.
+In terms of performing the calculations, all of our training of the model was done on a Dell PC with a 7th gen octocore Intel Core i7 CPU, 16GB of RAM and a Nvidia GeForce GTX 1050TI GPU with 4GB of RAM and 768 cores running Linux.
 
 \subsection{Predicting secondary structures alone}
 Fortælle om hvordan vi byggede vores single-model (convolutionelle lag, ReLU, softmax, BCELoss, padding).
