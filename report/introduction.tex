@@ -13,9 +13,18 @@ The textbook example when learning about neural networks and implementing them i
 Neurale netværk er rigtigt seje \cite{bishop2006}
 \subsection{Proteins}
 Proteins are large biomolecules that has a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. KILDEKILDEKILDE!!. They consist of a chain of amino acids, where it is the sequence of the amino acids that determine the protein. The linear sequence of amino acids in a protein is also known as a proteins primary structure. 
-\subsubsection{What is}
+
 \subsubsection{Secondary Structures}
+The secondary structure of a protein largely determined by it's primary structure. Among the many reasons for predicting the secondary structure, using it as a stepping stone for trying to find the three-dimensional structure of a protein, which is normally difficult to assess. The secondary structure itself is the three-dimensional form of local segments of the protein. [Qi, Oja, Weston \& Noble, p. 2].
+The secondary structure is normally divided into either 3 or 8 groups in the literature often named Q3 and Q8. Using the DSSP alphabet for giving the groups letters, the groups of Q3 are helix(H), sheets(B) and coils(C).KILDE KILDE
+When predicting Q3 secondary structures current state of the art has it's accuracy percentage in the mid eighties. This was for a long time the secondary structure prediction that was done, but due to advances in technology and research, the harder but more detailed Q8 predictions are gaining more attention. According to the 2 articles used as a starting point for this thesis, which will be further showed later, the accuracy for current state of the art when predicting Q8 secondary structure is around 72-74\%(KILDKILDEKILDE)
+Again using the DSSP alphabet for giving letters, the categories of Q8 are: alpha Helix(H), residue in isolated beta bridge(B), extended strand(E) 3-helix(G), 5-helix(I), hydrogen bonded turn(T), bent(S), loop(L). Those are the three dimensional forms a protein can take in a local segment.  
+
+
 \subsubsection{Solvent accessible surface area}
+Another feature of a protein we are looking into, is each amino acids solvency. The solvency is a measure of whether or not it can be absolved by water. This is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. This feature is another thing we will try to predict using our neural network. 
+
+
 \subsection{Neural networks}
 The common perception is that humans and animals process information, i.e. transform perceptional 
 stimuli and physiological conditions into behaviour, by using their brains. This is imprecise 
@@ -109,6 +118,8 @@ f = \begin{bmatrix}
 \]
 the result of convolving $a$ over $f$ would be:
 \subsubsection{Multitask learning}
+The concept of multitask learning with neural networks is both simple and ingenious. 
+
 
 \subsection{Prior research in this field}
 Skrive noget om den artikel vi tager udgangspunkt i.
