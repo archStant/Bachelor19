@@ -1,14 +1,50 @@
 \section{Methods}
 
-\subsection{Dataset}
-\subsubsection{Ophav}
-Hvor har vi dette datasæt fra, og hvem har lavet det?
+\subsection{Data}
+%\subsubsection{Source}
+The \texttt{PISCES Cull PDB} database server (Wang \& Dunbrack, 2003) is a commonly used source for data for evaluating 
+machine learning models trained to predict amino secondary structures. Following in the footsteps of the Zhou \& 
+Troyanskaya, we have used the same data set as in their 2014 paper \textit{Deep Supervised and Convolutional Generative 
+Stochastic Network}, which is a dataset produced by the PISCES server.
+
+The database contains information on 5926 proteins. Zhou \& Troyanskaya have filtered the data such that it contains no proteins consisting of less than 50 or more than 700 amino acids, and have thus encoded each protein as a section of 700 amino acids, the non-existant ones (in the case of a protein of less than 700 amino acids) being marked as \texttt{not sequenced}.
 
 \subsubsection{Features}
-Skrive noget om hvad vores datasæt er og hvordan det er sat op. Dvs. hvilke egenskaber er der, hvordan er de encoded (one-hot vs. binært (solvent)) og hvorvidt vi bruger dem til noget. Fortæl også om at strukturerne her er encoded som de 8 substrukturer og ikke de 3 grupperinger af strukturer.
+Each amino acid in the database contains 57 features (or channels) of information. The first 22 features encode which of the 20 amino acids that occur in genetic code, plus amino acid 'X' representing 'Unknown' as well as 'NoSeq'.
 
-\subsubsection{Opdeling i træning, test og validering}
-Fortæl om at vi har rigtigt meget træningsdata og hhv. 255 og 236 værdier i test og validering. Vi træner og backpropagerer over træningssættet, holder øje med valideringssættet (og træffer vores beslutninger ud fra det) og udsætter kun modellen for testsættet til sidst.
+This information is encoded in a one-hot format, meaning that instead of encoding the actual amino acid or the number of the acid, one encodes an array of zeros with only the element at the index of the number of the amino acid being set to one. So in order to encode Glutamic acid (E) i.e. the third amino acid, the one-hotted data would be $[0, 0, 1, 0, 0, ... , 0, 0]$. 
+
+Encoding the data in this way makes very good sence in regard to training classifiers, as if one was to encode amino acid E simply as the number 3 (E being the third amino acid), the classifier would falsely train on the premise that a guess of 4 was a less bad guess than a guess of 15, based on the proximity of the indexes.
+
+The secondary structure labels that the model attempts to predict is encoded in the same manner, however for training purposes we have collapsed it into indexes in our model. Further, as explained above, there are three main forms of protein secondary structures ($\alpha$-helix, $3_{10}$-helix and $\pi$-helix), however within them there are further 8 sub-forms of structures, which are the ones that are encoded in the dataset.
+
+\end{multicols}
+\begin{table}[h]
+\centering
+\begin{tabular}{l|l|l}
+Feature nr.   & Feature                                     & Encoding                 \\ \hline
+{[} 0,22{[}   & Amino acid residues                         & One-hot                  \\
+{[}22,31{[}   & Secondary structure labels                  & One-hot                  \\
+{[}31,33{[}   & N- and C-terminals                          & Binary                   \\
+{[}33,35{[}   & Relative and absolute solvent accessibility & Binary                   \\
+{[}35,57{[}   & Sequence profile                            & Probability distribution
+\end{tabular}
+\end{table}
+\newpage
+\begin{multicols}{2}
+\noindent The N- and C-terminals indicate whether the amino acid in question is the first or the last in the protein chain and are encoded binarily.
+
+While the solvent accessibility features in the PISCES database are encoded as floating point numbers, the creators of the dataset in question have followed the practice of (Qi et. al., 2012) and discretizised the values to binary values. The threshold for absolute accessibility is 15, relative accessibility is "is normalized by the largest accessibility value in a protein and thresholded at 0.15" (Zhou \& Troyanksaya, 2014).
+
+The sequence profile in the final 22 features is calculated using the \textit{Position-specific Scoring Matrix} (PSSM) system, and is used to indicate that if it had not been the amino acid in question that was present at this specific position, with what probability would it then statistically have been which of the other amino acids. Interestingly enough, the order of the amino acids in the sequence profile differs from that of the amino acid residues, however this should not have any impact on the model.
+
+
+\subsubsection{Splitting the data}
+When training our model, we split the above data into three sets: training, validation and test. The purpose of splitting the training data from the evaluation data is to counter possible overfitting, that is, training a model to an extent where it correctly predicts the kinks and quirks of the training set that do not express general tendencies in the system.
+
+The point in further splitting into both a validation and a test set is that we continuously evaluate the loss and accuracy on the validation set (instead of the training set) in order to make decision regarding the architecture and configuration of the model, but to prevent us from humanly overfitting to this set, the test set is held in reserve and is only evaluated once, in the end of a model's training.
+
+In this case, we followed the advice from the documentation accompanying the dataset and split the data into 5430 proteins for training, 255 proteins for testing and 236 proteins for validation. Further, we iterated over different batch-sizes for training the model (results below).
 
 \subsection{Tools}
 \subsubsection{Model}
