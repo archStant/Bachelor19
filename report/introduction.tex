@@ -22,7 +22,7 @@ Again using the DSSP alphabet for giving letters, the categories of Q8 are: alph
 
 
 \subsubsection{Solvent accessible surface area}
-Another feature of a protein we are looking into, is each amino acids solvency. The solvency is a measure of whether or not it can be absolved by water. This is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. This feature is another thing we will try to predict using our neural network. 
+Another feature of a protein we are looking into, is each amino acids solvency. The solvency is a measure of whether or not the amino accid is accessible by water. This is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. This is another feature that will be predicted using a neural network. 
 
 \subsection{Neural networks}
 The common perception is that humans and animals process information, i.e. transform perceptional 
@@ -130,6 +130,8 @@ f = \begin{bmatrix}
 \]
 the result of convolving $a$ over $f$ would be:
 \subsubsection{Multitask learning}
+
+The concept of multitask learning is both simple and ingenious. It's foundation is the idea that when training a neural network to predict a certain feature given a set of parameters, by training it to predict another or maybe several features instead of a single one, each individual prediction will reach a better accuracy. The reason for this is, that some of the patterns the network will identify, might be noise for the network when only predicting a single feature, but might be a central pattern for it to predict another feature. Thereby, by adding several features to predict, the idea is, what before was noise in the data, might now be helpful patterns to predict some features, and thereby increase the accuracy for all features. 
 
 \subsection{Prior research in this field}
 Skrive noget om den artikel vi tager udgangspunkt i.
