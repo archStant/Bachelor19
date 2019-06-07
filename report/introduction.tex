@@ -24,7 +24,6 @@ Again using the DSSP alphabet for giving letters, the categories of Q8 are: alph
 \subsubsection{Solvent accessible surface area}
 Another feature of a protein we are looking into, is each amino acids solvency. The solvency is a measure of whether or not it can be absolved by water. This is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. This feature is another thing we will try to predict using our neural network. 
 
-
 \subsection{Neural networks}
 The common perception is that humans and animals process information, i.e. transform perceptional 
 stimuli and physiological conditions into behaviour, by using their brains. This is imprecise 
@@ -34,11 +33,17 @@ system}, which is in turn responsible for the internal workings of human and ani
 This nervous system is an abstaction over a number of \textit{neurons} interconnected by 
 synapses. Neurons in turn are so-called electrically exitable cells. In a gross over-simplification, this can be translated into the case that each neuron can have different internal states, depending on the internal states of the neurons it is connected to, thus forming a \textit{neural network}.
 
-\begin{figure}[h]
-  \centering
-  \frame{\includegraphics[width=0.8\linewidth]{images/Gyrus_Dentatus_40x}}
-  \caption{Neurons in the dentate gyrus of an epilepsy patient.}
-\end{figure}
+%\begin{figure}[h]
+%  \centering
+%  \frame{\includegraphics[width=0.8\linewidth]{images/Gyrus_Dentatus_40x}}
+%  \caption{Neurons in the dentate gyrus of an epilepsy patient.}
+%\end{figure}
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=0.8\linewidth]{images/Gyrus_Dentatus_40x}
+ \captionof{figure}{Neurons in the dentate gyrus of an epilepsy patient.}
+\end{Figure}
 
 While obviously interesting within the fields of biology or psychology, this structure has shown 
 to be enourmously interesting in the field of computation, as one can in fact model this very 
@@ -59,11 +64,18 @@ Thus, if one was to describe it more precisely, the value $z_i$ of neuron layer 
 z_i = h\left(\sum_{j=0}^d w_{ij}\cdot z_{i-1} + w_{i0}\right)
 \]
 Such a model is useful for calculating continuous values as well as for classification purposes. A common example of the latter is the MNIST data set of hand-written digits in 28x28 pixel greyscale images. In this case the light intensity of the 784 ($28^2$) pixels could fittingly be the input layer, while a layer consisting of 10 nodes (corresponding to digits 0 through 9) could be the output layer, such that the system could be used to predict which digit is written in a given image.
-\begin{figure}[h]
-  \centering
-  \frame{\includegraphics[width=0.7\linewidth]{images/mnist}}
-  \caption{Handwritten digits in the MNIST data set.}
-\end{figure}
+%\begin{figure}[h]
+%  \centering
+%  \frame{\includegraphics[width=0.7\linewidth]{images/mnist}}
+%  \caption{Handwritten digits in the MNIST data set.}
+%\end{figure}
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=0.7\linewidth]{images/mnist}
+ \captionof{figure}{Handwritten digits in the MNIST data set.}
+\end{Figure}
+
 A common implementation of a neural network to perform this task is to have a single hidden layer of 800 nodes, however the most successful implementations in regards to the MNIST data set have been made with \textit{convolutional neural networks}, but we shall return to these later.
 
 \subsubsection{Training}
@@ -118,8 +130,6 @@ f = \begin{bmatrix}
 \]
 the result of convolving $a$ over $f$ would be:
 \subsubsection{Multitask learning}
-The concept of multitask learning with neural networks is both simple and ingenious. 
-
 
 \subsection{Prior research in this field}
 Skrive noget om den artikel vi tager udgangspunkt i.
