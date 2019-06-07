@@ -243,3 +243,7 @@ TSWLatexianTemp*
 
 #Python data
 *.npy
+
+data/training_data/
+
+data/

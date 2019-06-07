@@ -1,0 +1,97 @@
+# Den oprindelige kode jeg stjal - bare som backup
+
+for epoch in range(EPOCH):
+    for step, b_x in enumerate(torch_X_train):   # gives batch data, normalize x when iterate train_loader
+        b_y = torch_Y_train[step]
+        output = cnn(b_x)#[0]               # cnn output
+        loss = loss_func(output, b_y)   # cross entropy loss
+        optimizer.zero_grad()           # clear gradients for this training step
+        loss.backward()                 # backpropagation, compute gradients
+        optimizer.step()                # apply gradients
+
+        if step % 50 == 0:
+            test_output, last_layer = cnn(torch_X_test)
+            pred_y = torch.max(test_output, 1)[1].data.numpy()
+            accuracy = float((pred_y == torch_Y_test.data.numpy()).astype(int).sum()) / float(torch_Y_test.size(0))
+            print('Epoch: ', epoch, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.2f' % accuracy)
+            
+            
+            
+59.14%, 81.29%, 79.43%
+59.00%, 81.24%, 79.41%
+
+
+
+multi flere lag:
+
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv1d(
+                in_channels=input_channels,       
+                out_channels=layer_widths[0],      
+                kernel_size=kernel_sizes[0],        
+                stride=1,             
+                padding=int(kernel_sizes[0]/2),            
+            ),                        
+            nn.ReLU(),                
+        )
+        self.conv2 = nn.Sequential(   
+            nn.Conv1d(
+                in_channels=layer_widths[0],       
+                out_channels=layer_widths[1],      
+                kernel_size=kernel_sizes[1],        
+                stride=1,             
+                padding=int(kernel_sizes[1]/2),            
+            ),                        
+            nn.ReLU(),                
+        )
+        self.conv3 = nn.Sequential(   
+            nn.Conv1d(
+                in_channels=layer_widths[1],       
+                out_channels=layer_widths[2],      
+                kernel_size=kernel_sizes[2],        
+                stride=1,             
+                padding=int(kernel_sizes[2]/2),            
+            ),                        
+            nn.ReLU(),                
+        )
+        self.conv4 = nn.Sequential(     
+            nn.Conv1d(
+                in_channels=layer_widths[2],       
+                out_channels=layer_widths[3],       
+                kernel_size=kernel_sizes[3],
+                stride=1,             
+                padding=int(kernel_sizes[3]/2),            
+            ),
+            nn.ReLU(),
+            #nn.Softmax(dim=1),
+        )
+        self.out = nn.Sequential(     
+            nn.Conv1d(
+                in_channels=layer_widths[3],       
+                out_channels=output_channels,       
+                kernel_size=kernel_sizes[4],
+                stride=1,             
+                padding=int(kernel_sizes[4]/2),            
+            ),
+            #nn.ReLU(),
+            #nn.Softmax(dim=1),
+        )
+        self.soft = nn.Softmax(dim=1)
+        self.relu = nn.ReLU()
+        self.sig1 = torch.nn.Sigmoid()
+        self.sig2 = torch.nn.Sigmoid()
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
+        output = self.out(x)
+        secondary_structures = self.soft(self.relu(output[:,:-2,:]))
+        rel_solvent_acc = self.sig1(output[:,-2,:])
+        abs_solvent_acc = self.sig2(output[:,-1,:])
+        
+        return secondary_structures, rel_solvent_acc, abs_solvent_acc 
