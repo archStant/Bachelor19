@@ -131,9 +131,11 @@ f = \begin{bmatrix}
 the result of convolving $a$ over $f$ would be:
 \subsubsection{Multitask learning}
 
-The concept of multitask learning is both simple and ingenious. It's foundation is the idea that when training a neural network to predict a certain feature given a set of parameters, by training it to predict another or maybe several features instead of a single one, each individual prediction will reach a better accuracy. The reason for this is, that some of the patterns the network will identify, might be noise for the network when only predicting a single feature, but might be a central pattern for it to predict another feature. Thereby, by adding several features to predict, the idea is, what before was noise in the data, might now be helpful patterns to predict some features, and thereby increase the accuracy for all features. 
+The concept of multitask learning is both simple and ingenious. It's foundation is that, when training a neural network to predict a certain task given a set of parameters, by training it to predict another or maybe several tasks instead of a single one, each individual prediction will reach a better accuracy. The idea behind it is to use domain-specific information in the training signals of related tasks, to improve the generalization of a model. By training a model to have good predictions on more than one task, data dependent noise related to one task will then be identified easier as something to be ignored and thereby the general accuracy will increase. Furthermore when having a limited data set with a lot of noise, the model will, by having several tasks to predict, have help in focusing the attention on the relevant features that lead to correct predictions, and ignoring data specific features that might lead to over fitting. 
 
 \subsection{Prior research in this field}
+
+
 Skrive noget om den artikel vi tager udgangspunkt i.
 
 
