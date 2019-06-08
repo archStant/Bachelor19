@@ -34,9 +34,9 @@ Feature nr.   & Feature                                     & Encoding          
 \begin{multicols}{2}
 \noindent The N- and C-terminals indicate whether the amino acid in question is the first or the last in the protein chain and are encoded binarily.
 
-While the solvent accessibility features in the PISCES database are encoded as floating point numbers, the creators of the dataset in question have followed the practice of (Qi et. al., 2012) and discretizised the values to binary values. The threshold for absolute accessibility is 15, relative accessibility is "is normalized by the largest accessibility value in a protein and thresholded at 0.15" (Zhou \& Troyanksaya, 2014).
+While the solvent accessibility features in the PISCES database are encoded as floating point numbers, the creators of the dataset in question have followed the practice of (Qi et. al., 2012) and discretizised the values to binary values. The threshold for absolute accessibility is 15, while relative accessibility is "is normalized by the largest accessibility value in a protein and thresholded at 0.15" (Zhou \& Troyanksaya, 2014).
 
-The sequence profile in the final 22 features is calculated using the \textit{Position-specific Scoring Matrix} (PSSM) system, and is used to indicate that if it had not been the amino acid in question that was present at this specific position, with what probability would it then statistically have been which of the other amino acids. Interestingly enough, the order of the amino acids in the sequence profile differs from that of the amino acid residues, however this should not have any impact on the model.
+The sequence profile in the final 22 features is calculated using the \textit{Position-Specific Scoring Matrix} (PSSM) system, and is used to indicate that if it had not been the amino acid in question that was present at this specific position, with what probability would it then statistically have been which of the other amino acids. Interestingly, the order of the amino acids in the sequence profile differs from that of the amino acid residues, however this should not have any impact on the model.
 
 
 \subsubsection{Splitting the data}
@@ -44,7 +44,9 @@ When training our model, we split the above data into three sets: training, vali
 
 The point in further splitting into both a validation and a test set is that we continuously evaluate the loss and accuracy on the validation set (instead of the training set) in order to make decision regarding the architecture and configuration of the model, but to prevent us from humanly overfitting to this set, the test set is held in reserve and is only evaluated once, in the end of a model's training.
 
-In this case, we followed the advice from the documentation accompanying the dataset and split the data into 5430 proteins for training, 255 proteins for testing and 236 proteins for validation. Further, we iterated over different batch-sizes for training the model (results below).
+In this case, we followed the advice from the documentation accompanying the dataset and split the data into 5430 proteins for training, 255 proteins for testing and 236 proteins for validation. The training set was then further shuffled between each epoch.
+
+In evaluating the optimal hyperparameters for hte model we iterated over different batch-sizes for training (results below).
 
 \subsection{Tools}
 \subsubsection{Model}
@@ -96,6 +98,12 @@ $$
  \includegraphics[width=\linewidth]{../graphs/softmax}
  \captionof{figure}{Example data softmaxed}
 \end{Figure}
+One will often see a very similar function called the \textit{Logarithmic Softmax} which resembles the above, but with the addition that the probability $\sigma(x_i)$ equals the natural logarithm of the same:
+\[
+\sigma_{log}\left(x_{i}\right)=\log \left(\frac{e^{ x_{i}}}{\sum_{j=1} e^{ x_{j}}}\right)
+\]
+In practical implementations this approach helps preventing possible underflows.
+
 %\begin{figure}[h]
 %  \centering
 %  \frame{\includegraphics[width=\linewidth]{../graphs/softmax}}
@@ -107,13 +115,7 @@ $$
 Between two probability distributions each over the same set of outcomes there exists a certain cross entropy.
 Thus, given two probability distributions \textit{m} and \textit{n} predicting the discrete outcome $\mathcal{Z}$, the formula for calculating the cross entropy is:
 $$L ( m , n ) = - \sum _ { z \in \mathcal { Z } } m ( z ) \log n ( z )$$
-A specific instance of the cross entropy loss is the \textit{binary cross entropy loss}, which is useful in cases where the possible outcome is binary (i.e. there are only two possible outcomes). In this case the formula becomes:\\
-\[
-\ell(m, n)=L=\left\{l_{1}, \ldots, l_{N}\right\}^{\top}
-\]
-where
-\[ \quad l_{n}=-w_{n}\left[n_{n} \cdot \log m_{n}+\left(1-n_{n}\right) \cdot \log \left(1-m_{n}\right)\right]
-\]
+A specific instance of the cross entropy loss is the \textit{binary cross entropy loss}, which is useful in cases where the possible outcome is binary (i.e. there are only two possible outcomes). 
 \\
 Seing as the aim of this paper was to train our network to perform classifications first on amino acid secondary structures (of which there are eight) and then relative and absolute solvent accessibility (which are both encoded as either ones or zeros), we have used a Cross Entropy Loss function on the former and a Binary Cross Entropy Loss function on the two latter.
 
@@ -123,7 +125,7 @@ In training our network we utilized a machine learning framework for Python call
 The PyTorch library is build upon the \href{http://torch.ch/}{Torch} library, originally a machine learning library and language based on the scripting language Lua.\\
 The strength in using PyTorch stems from several aspects:
 \paragraph{GPU support}
-PyTorch provides a strong framework for performing calculations on a graphical processing unit rather than the computer's CPU. While GPUs are valued in video game circles, they are also enourmously useful for performing machine learning, since this is often tasks that involve a high number of calculations that can perfectly fine be performed in parallel. For this, a GPU is preferred over a CPU since they often have a much higher number of cores, and are thus better suited for parallel programming.
+PyTorch provides a strong framework for performing calculations on a graphical processing unit rather than the computer's CPU. While GPUs are valued in video game circles, they are also enourmously useful for performing machine learning, since this is often tasks that involve a high number of calculations that can perfectly fine be performed in parallel. For this, a GPU is preferred over a CPU since they often have a much higher number of cores, and are thus better suited for parallel programming. Indeed in our case, there was a factor of 20 difference in the time needed to train an epoch between doing it on the CPU versus the GPU.
 \paragraph{Tensors}
 The main data structure used in the PyTorch framework is tensors. In this context, a tensor is to mean a multi-dimensional array much like the ones implemented in numpy, but with the option to place it on the GPU rather than the CPU.
 \paragraph{Automatic differentiation}
@@ -143,16 +145,59 @@ optimizer.zero_grad()
 loss.backward()
 optimizer.step()
 \end{lstlisting}
+
+\paragraph{Ready-made implementations}
+A final helpful aspect of using PyTorch for implementing artificial neural networks is the abundance of already implemented algorithms and functions. This adds the further detail to the implementation that several of the most often used functions have been written together for reasons of numerical stability. 
+
+For example, the above mentioned Cross Entropy Loss function, which when implemented in PyTorch also contains an implementation of the \texttt{LogSoftmax()} function. The documentation for PyTorch reveals that the implementation then becomes:
+
+\begin{align*}
+\operatorname{loss}(x, \text {class})&=-\log \left(\frac{e^{ x[\text {class}]}}{\sum_{j} e^{ x[j]}}\right)\\
+&=-x[\text {class}]+\log \left(\sum_{j} e^{x[j]}\right)
+\end{align*}
+
+\noindent A similar circumstance is that of the Binary Cross Entropy loss, where PyTorch provides an implementation in the form of \texttt{BCEWithLogitsLoss()} which readily combines the Binary Cross Entropy Loss with a sigmoid function, again in order to provide numerical stability. In this case the implementation becomes: \\
+\[
+\ell(m, n)=L=\left\{l_{1}, \ldots, l_{N}\right\}^{\top}
+\]
+where
+\[ \quad l_{n}=-w_{n}\left[n_{n} \cdot \log m_{n}+\left(1-n_{n}\right) \cdot \log \left(1-m_{n}\right)\right]
+\]
+
+\subsubsection{Hardware}
 In terms of performing the calculations, all of our training of the model was done on a Dell PC with a 7th gen octocore Intel Core i7 CPU, 16GB of RAM and a Nvidia GeForce GTX 1050TI GPU with 4GB of RAM and 768 cores running Linux.
 
-\subsection{Predicting secondary structures alone}
-Fortælle om hvordan vi byggede vores single-model (convolutionelle lag, ReLU, softmax, BCELoss, padding).
+\subsection{Predicting secondary structures}
+We built a convolutional neural network, implemented in Python using PyTorch in order to predict amino acid secondary structures from the amino acid residues as well as the sequence profile. We tested variations on number of layers, layer depth, kernel sizes and learning rate (results below) in order to maximize performance of the model. 
 
-\subsubsection{Beregning af præcision}
-Forklar at det vi tæller er antallet af korrekte forudsigelser over antal af faktiske aminosyrer. Gennemgå herunder matematikken i at vi kollapser fra one-hot til classification, og så kører vores mask-magi på det.
+The basic structure of the model remained unchanged throughout these test. The basics of the structure was comprised of followin elements:
+\begin{itemize}
+\item It was to be a deep neural network (i.e. at least one hidden layer of neurons),
+\item The layer debth was to remain the same throughout the network,
+\item Sufficient padding was to be added to the convolving layers so that the breadth of the intermediary values remained the same (the 700 amino acids, that is),
+\item After each layer, save the last, the layer was activated using a rectified linear unit,
+\item The model should not itself contain a SoftMaxing layer, since this was built into the loss function,
+\item The model was evaluated and optimized based on the output of a Cross Entropy loss function,
+\item The model was to be optimized based on the loss on the training set while being continuously humanly evaluated on the loss and accuracy on the validation set.
+\end{itemize}
 
-\subsection{Implementing multitask learning}
-\subsubsection{Generelt om Multi-task learning}
+\subsubsection{Calculation of accuracy}
+Having built a network that was training and improving on the training set data, it was also relevant evaluate the accuracy of the predictions of the network in addition to the calculation of loss on the validation set.
+
+Several approaches to evaluating predictions exist. The output of our model was something of a proxy to a probability distribution, however not a true probability distribution since the model itself did not perform a SoftMax on the output. This was however not an issue, since the index of the largest value in a set of values remains the same before and after being SoftMaxed, and we could thus safely treat the index of the largest value in the un-SoftMaxed output as the label of the prediction.
+
+In implementing a procedure to evaluate the accuracy of a prediction, we first collapse the output distribution as just described, and then produce a matrix of indicators as to whether the predicted label matched the label in the matrix of actual secondary structure labels as provided by the database.
+
+Of course at this point the model would also be evaluated on its accurate prediction of padding (a task that proved remarkably managable), and thus could achieve arbitrarily high accuracy just by adding more padding to the set. To avoid this, we construct a masking matrix from the values in the target set that are \texttt{NoSeq}. We can then use this mask to filter out the irrelevant values in our matrix of correct and false predictions.
+
+Finally taking the mean of this, now filtered, matrix of prediction correctness produces the percentage of the relevant predictions that were in fact correct.
+
+\subsection{Implementing multi-task learning}
+%\subsubsection{Generelt om Multi-task learning}
+There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers.
+
+In contrast to this stands soft parameter sharing, in which one could say that the model is comprised of a series of sub-models, each containing their own distinct layers and oriented towards each their prediction task. In this case the parameters of each of the models are balanced against each other 
+
 Start med refleksioner over hvordan vi bruger shared-parameters i vores model, og forklar at vi stadig kører udelukkende konvolutionelle lag igennem modellen.
 \subsubsection{Opbygningen af vores model}
 Fortæl om opbygningen af vores model - dvs. at vi ReLU'er hele vejen igennem, undtagen sidste lag, og så hvordan vi splitter dataen ud for så at ReLU'e og softmax'e sekundærstrukturerne, medens at vi afrunder solvent-egenskaberne.
