@@ -12,7 +12,7 @@ In our tests we evaluated from two to five hidden layers. Note, that the output 
 % Please add the following required packages to your document preamble:
 % \usepackage[normalem]{ulem}
 % \useunder{\uline}{\ul}{}
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{lcccccc}
 \multicolumn{7}{c}{\textbf{No. of layers}} \\
@@ -37,7 +37,7 @@ Below are the results of our tests of learning rate.
 % Please add the following required packages to your document preamble:
 % \usepackage[normalem]{ulem}
 % \useunder{\uline}{\ul}{}
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{lcccccc}
 \multicolumn{7}{c}{\textbf{Learning rate}} \\
@@ -53,7 +53,7 @@ Below are the results of our tests of learning rate.
 \end{tabular}
 \end{table}
 Not only did the non-optimal learning rates not perform as well as 0.0005, but they also trained significantly slower, as seen on the graph below.
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{../graphs/new/learning_rate}
   \caption{Accuracy on the validation with varying learning rate. The green lines represent epochs.}
@@ -63,7 +63,7 @@ For the remainder of the tests we used a learning rate of 0.0005.
 \subsubsection{Depth of layers}
 As with the number of layers, the depth affects both model potential complex predictive performance and model weight and size. We started from the depth of 100 as also used by Xi et al. and found that no increase in performance was acheived by adding more depth, however some gains were made by shallowing down the layers a bit.
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{lcccccc}
 \multicolumn{7}{c}{\textbf{Layer depth}} \\
@@ -79,7 +79,7 @@ As with the number of layers, the depth affects both model potential complex pre
 \end{tabular}
 \end{table}
 \noindent As is seen in the table a depth of 90 filters proved most accurate on our tests. Below is shown a graph of three of the values, illustrating how a depth of 90 performed better than the two other continuously throughout training. Refer to the appendix for at graph containing all the tested  depths.
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{../graphs/new/layer_width_1}
   \caption{Accuracy on the validation set with varying layer depth.}
@@ -90,11 +90,13 @@ Fortæl om kernel sizes og om hvordan vi først prøvede én størrelse på dem 
 In the article by Xi et al, a kernel size of 11 was chosen on the basis that the average length 
 
 
-\begin{multicols}{2}
-
 \subsection{Final predictive capabilities}
 Forklar hvordan vi fandt frem til vores hyperparametre på multi-task modellen og så anvendte de samme på single-task. Skriv noget tekst om hvordan vi på test-sættet nåede op på so-and-so meget præcision på hhv. den ene og anden model og hhv. strukturer og solvent egenskaber, samt sammeligning af resultatet på test- og valideringssæt.
 
 
 \subsection{Comparison}
 Forklar hvordan de to modeller ender med næsten samme præcision, omend multi-task modellen tager langt længere tid om at komme derop. De convergerer (jeg tror ordet er 'predictive ceiling') begge omkring de 68.5\%, men for single allerede omkring 10 epoker medens multi skal bruge 25 epoker.
+
+
+\newpage
+\begin{multicols}{2}
