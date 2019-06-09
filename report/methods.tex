@@ -68,6 +68,7 @@ Sigmoid(x) = \frac{1}{1 + e^{-x}} = \frac{e^x}{e^x +1}
 \begin{Figure}
  \centering
  \includegraphics[width=\linewidth]{../graphs/activation.png}
+ \captionsetup{width=0.8\linewidth, font=small}
  \captionof{figure}{The sigmoid and rectifier activation functions}
 \end{Figure}
 
@@ -96,6 +97,7 @@ $$
 \begin{Figure}
  \centering
  \includegraphics[width=\linewidth]{../graphs/softmax}
+ \captionsetup{width=0.8\linewidth, font=small}
  \captionof{figure}{Example data softmaxed}
 \end{Figure}
 One will often see a very similar function called the \textit{Logarithmic Softmax} which resembles the above, but with the addition that the probability $\sigma(x_i)$ equals the natural logarithm of the same:
@@ -167,10 +169,12 @@ where
 \subsubsection{Hardware}
 In terms of performing the calculations, all of our training of the model was done on a Dell PC with a 7th gen octocore Intel Core i7 CPU, 16GB of RAM and a Nvidia GeForce GTX 1050TI GPU with 4GB of RAM and 768 cores running Linux.
 
-\subsection{Predicting secondary structures}
+\subsection{Single-task learning}
 We built a convolutional neural network, implemented in Python using PyTorch in order to predict amino acid secondary structures from the amino acid residues as well as the sequence profile. We tested variations on number of layers, layer depth, kernel sizes and learning rate (results below) in order to maximize performance of the model. 
 
-The basic structure of the model remained unchanged throughout these test. The basics of the structure was comprised of followin elements:
+\subsubsection{Architecture}
+
+The basic structure of the model remained unchanged throughout these test. The basics of the structure was comprised of following elements:
 \begin{itemize}
 \item It was to be a deep neural network (i.e. at least one hidden layer of neurons),
 \item The layer debth was to remain the same throughout the network,
@@ -181,7 +185,14 @@ The basic structure of the model remained unchanged throughout these test. The b
 \item The model was to be optimized based on the loss on the training set while being continuously humanly evaluated on the loss and accuracy on the validation set.
 \end{itemize}
 
-\subsubsection{Calculation of accuracy}
+\begin{Figure}
+ \centering
+ \includegraphics[width=\linewidth]{../graphs/padding}
+ \captionsetup{width=0.8\linewidth, font=small}
+ \captionof{figure}{The layer breadth is preserved across convolutions thanks to padding.}
+\end{Figure}
+
+\subsubsection{Accuracy}
 Having built a network that was training and improving on the training set data, it was also relevant evaluate the accuracy of the predictions of the network in addition to the calculation of loss on the validation set.
 
 Several approaches to evaluating predictions exist. The output of our model was something of a proxy to a probability distribution, however not a true probability distribution since the model itself did not perform a SoftMax on the output. This was however not an issue, since the index of the largest value in a set of values remains the same before and after being SoftMaxed, and we could thus safely treat the index of the largest value in the un-SoftMaxed output as the label of the prediction.
@@ -192,25 +203,75 @@ Of course at this point the model would also be evaluated on its accurate predic
 
 Finally taking the mean of this, now filtered, matrix of prediction correctness produces the percentage of the relevant predictions that were in fact correct.
 
-\subsection{Implementing multi-task learning}
+\subsection{Multi-task learning}
 %\subsubsection{Generelt om Multi-task learning}
-There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers.
+There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers. This approach provides a very strong line of defence against overfitting, as forcing the model to optimize on several predictive capabilities makes it less  susceptible to representing the aspects of the training data that are not representative of general tendencies in the domain. 
 
-In contrast to this stands soft parameter sharing, in which one could say that the model is comprised of a series of sub-models, each containing their own distinct layers and oriented towards each their prediction task. In this case the parameters of each of the models are balanced against each other 
+In contrast to this stands soft parameter sharing, in which one could say that the model is comprised of a series of sub-models, each containing their own distinct layers and oriented towards each their prediction task. In this case the parameters of each of the models are balanced and regularized against each other in order to make them as similar as possible.
 
-Start med refleksioner over hvordan vi bruger shared-parameters i vores model, og forklar at vi stadig kører udelukkende konvolutionelle lag igennem modellen.
-\subsubsection{Opbygningen af vores model}
-Fortæl om opbygningen af vores model - dvs. at vi ReLU'er hele vejen igennem, undtagen sidste lag, og så hvordan vi splitter dataen ud for så at ReLU'e og softmax'e sekundærstrukturerne, medens at vi afrunder solvent-egenskaberne.
+On the grounds that the data set we are working with is somewhat limited (5926 proteins out of some 400.000 in the original PDB database) we were concerned about possible overfitting, and thus opted to implement our multi-task learning network with hard parameter sharing.
 
-\subsubsection{Træning}
-Fortæl hvordan vi udregner loss på vores model, dvs. at vi udregner tre losses; sekundærstruktur, relativ solvency og absolut solvency. Vi bruger BCE på dem alle sammen, så redegør hvorfor vi godt kan det på solvent også.
+\subsubsection{Architecture}
+Having decided on employing hard parameter sharing, we implemented the model in much a similar fashion to the single-task model explained above (i.e. convolutional layers, ReLU, padding, etc.). What sets the two models apart is the fact that in the final layer of the multi-task model the data is split up into the three output sets, secondary structure and relative/absolute solvent accessibility.\\
+One could think of the types of these three output as identical; the structure labels are a probability distribution while in a certain sense so are the solvent accessibility features - only a probability between two possible outcomes.\\
+Nonetheless different final activation function were needed for the two, since performing a softmax on the binary output would always yield a 1. Thus the two solvent features are activated by a sigmoid function - effectively mapping their value to a probability between 0 and 1.\\
 
-\subsubsection{Beregning af præcision}
-Forklar hvordan vi til strukturerne bruger samme beregning som ovenfor, mens vi gør næsten det samme for solvent egenskaberne (men hver for sig).
+\begin{Figure}
+ \centering
+ \includegraphics[width=\linewidth]{../graphs/arch}
+ \captionsetup{width=0.8\linewidth, font=small}
+ \captionof{figure}{Model architecture: The lightning represents one or more similar convolutional layers.}
+\end{Figure}
 
-\subsection{Hyperparametre}
-Fortæl at vi i projektet vil prøve at iterere over forskellige hhv. lagstørrelser, antal lag, kernelsizes, og learning rate.
-Forklar at vi vil starte med at tage udgangspunkt i de værdier som Xi bruger, og så iterere lidt frem og tilbage over dem.
+\noindent From a technical implementational perspective, as how in the previous model the SoftMax function was already included in the PyTorch implementation of BCELoss, in this case the sigmoid function is not explicitly stated in the model, as it is already included in the PyTorch module \texttt{BCEWithLogitsLoss} - the Binary Cross Entropy loss function.
+
+\subsubsection{Training}
+Utilizing the PyTorch loss function, autogradient and optimizer-libraries, implementing a model with essentially three losses is easy. As mentioned above, the model had a Cross Entropy loss for the secondary structure prediction, as well as two Binary Cross Entropy losses for the two solvency features. Training the model with regards to minimizing these losses is acheived simply by letting a variable be the sum of the three, and then letting the library automatically backtrace each of the parameters in the model via this value.
+\begin{lstlisting}
+# Calculate losses
+loss1 = loss_func_structure(calc_struct,  correct_struct)
+loss2 = loss_func_solvent(calc_rel, correct_rel)
+loss3 = loss_func_solvent(calc_abs,  correct_abs)
+
+# Sum the losses
+loss_sum = (loss1 + loss2 + loss3)
+
+# Backpropagate and train
+loss_sum.backward()
+optimizer.step()
+\end{lstlisting}
+
+
+\subsubsection{Accuracy}
+Evaluating the accuracy of the model's predictions happens for each of the three features being predicted in the model.\\
+The accuracy of the secondary structure label prediction happens in a similar fashion to the one in the single-task model. Seing as we know the structure of the solvent accessibility features to be binary and independent (an amino acid can be relatively solvent while not absolutely solvent and vica-versa), we can, after manually applying a sigmoid function on them, employ a simple round function to convert the probability outputted by the model to a binary prediction.\\
+Having done so, the same method of constructing a matrix of correct and false predictions and then filtering this matrix by the mask already derived from the secondary structures was used.
+
+
+\subsection{Hyperparameters}
+In order to optimize our two models we iterated over a series of values for the models' hyperparameters, that is the number of layers, the debth of the layers, the learning rate and the size of the kernels used in the convolutions.\\
+For a starting point, we chose to adapt the values used by Xi et. al, and then iterated to both sides of those values.\\
+An initial decision to make was the batch size - that is how many inputs from the data set to process at once. In general there are three approaches how many data points to train on at once, compared to the total length of the data (LOD):
+\begin{center}
+\begin{tabular}{l|c}
+\hline 
+Name & Size \\ 
+\hline 
+Batch gradient & Size = LOD \\ 
+
+Minibatch gradient & 1 $<$ Size $<$ LOD \\ 
+
+Generative Stochastic & 1 \\ 
+\hline 
+\end{tabular} 
+\end{center}
+In the case of Generative Stochastic networks, the model is continuously trained on random single data points, and is generally accepted to produce better predictions than both batch and mini-batch gradient descents, however at the cost of increased training time.
+Batch gradient was not an option for us, for the simple practical reason that there was not enough memory on our GPU to handle the entire data set at once. We opted for a batch size of 4 throughout our tests in a compromise between predictive power and speed of training.
+
+
+
+
+
 
 
 
