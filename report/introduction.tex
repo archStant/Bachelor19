@@ -1,10 +1,11 @@
 \section{Introduction}
 \subsection{Motivation}
-In computer science today, one of the areas that are the most in the public eye and covered by media and politicians alike is the area of Artificial Intelligence. Within this area concepts like deep learning, machine learning and neural networks are showing up repeatedly as buzzwords and central areas for future research and use. 
-It is in this context the motivation to have neural networks as a topic for this thesis has it's origins. This thesis' purpose is threefold. The first is to give an introductory understanding of the topic of machine learning and more specifically neural networks. This includes a basic understanding of the theoretical basis of neural networks. Secondly the purpose is to widen this understanding of neural networks by implementing one to handle a specific task. This task is to predict secondary structure of proteins based on their amino acid composition. Lastly the purpose is to give an rudementary understanding of of those proteins to give context to the use of the neural network.
-
+In computer science today, one of the areas that are the most in the public eye and covered by media and politicians alike is the area of Artificial Intelligence. Within this area concepts like deep learning, machine learning and neural networks are showing up repeatedly as buzzwords and central areas for future research and use.\\
+It is in this context the motivation to have neural networks as a topic for this thesis has it's origins. This thesis' purpose is threefold. The first is to give an introductory understanding of the topic of machine learning and more specifically neural networks. This includes a basic understanding of the theoretical basis of neural networks. \\
+Secondly the purpose is to widen this understanding of neural networks by implementing one to handle a specific task. This task is to predict secondary structure of proteins based on their amino acid composition. Lastly the purpose is to give an rudementary understanding of of those proteins to give context to the use of the neural network.\\
 The motivation for choosing protein secondary structure prediction for the neural networks also has several reasons. 
-The textbook example when learning about neural networks and implementing them is to identify a handwritten number between 0 and 9. This neural network is often trained on the MNIST dataset of handwritten numbers. Since many people has done this, and the application and importance of this in the real world is limited there would be very little content to this thesis if that had been the context. Protein secondary structure prediction on the other hand has more real world applications and are an important branch of bioinformatics, and is used in both medicine and biotechnology. Since it is an important topic with real world use, it is an area that is still under research to improve the prediction accuracy. As such it gives a current and relevant context for this thesis as an interesting introduction to neural networks and their application.   
+The textbook example when learning about neural networks and implementing them is to identify a handwritten number between 0 and 9. This neural network is often trained on the MNIST dataset of handwritten numbers. \\
+Since many people has done this, and the application and importance of this in the real world is limited there would be very little content to this thesis if that had been the context. Protein secondary structure prediction on the other hand has more real world applications and are an important branch of bioinformatics, and is used in both medicine and biotechnology. Since it is an important topic with real world use, it is an area that is still under research to improve the prediction accuracy. As such it gives a current and relevant context for this thesis as an interesting introduction to neural networks and their application.   
 
 
 
@@ -17,12 +18,12 @@ Proteins are large biomolecules that has a wide range of functions in organisms.
 \subsubsection{Secondary Structures}
 The secondary structure of a protein largely determined by it's primary structure. Among the many reasons for predicting the secondary structure, using it as a stepping stone for trying to find the three-dimensional structure of a protein, which is normally difficult to assess. The secondary structure itself is the three-dimensional form of local segments of the protein. [Qi, Oja, Weston \& Noble, p. 2].
 The secondary structure is normally divided into either 3 or 8 groups in the literature often named Q3 and Q8. Using the DSSP alphabet for giving the groups letters, the groups of Q3 are helix(H), sheets(B) and coils(C).KILDE KILDE
-When predicting Q3 secondary structures current state of the art has it's accuracy percentage in the mid eighties. This was for a long time the secondary structure prediction that was done, but due to advances in technology and research, the harder but more detailed Q8 predictions are gaining more attention. According to the 2 articles used as a starting point for this thesis, which will be further showed later, the accuracy for current state of the art when predicting Q8 secondary structure is around 72-74\%(KILDKILDEKILDE)
+When predicting Q3 secondary structures current state of the art has it's accuracy percentage in the mid eighties. This was for a long time the secondary structure prediction that was done, but due to advances in technology and research, the harder but more detailed Q8 predictions are gaining more attention. According to the two articles used as a starting point for this thesis, which will be further showed later, the accuracy for current state of the art when predicting Q8 secondary structure is around 72-74\%(KILDKILDEKILDE)
 Again using the DSSP alphabet for giving letters, the categories of Q8 are: alpha Helix(H), residue in isolated beta bridge(B), extended strand(E) 3-helix(G), 5-helix(I), hydrogen bonded turn(T), bent(S), loop(L). Those are the three dimensional forms a protein can take in a local segment.  
 
 
 \subsubsection{Solvent accessible surface area}
-Another feature of a protein we are looking into, is each amino acids solvency. The solvency is a measure of whether or not the amino accid is accessible by water. This is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. This is another feature that will be predicted using a neural network. 
+Another feature of a protein we are looking into, is each amino acids solvency. The solvency is a measure of whether or not it can be absolved by water. This is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. This feature is another thing we will try to predict using our neural network. 
 
 \subsection{Neural networks}
 The common perception is that humans and animals process information, i.e. transform perceptional 
@@ -42,6 +43,7 @@ synapses. Neurons in turn are so-called electrically exitable cells. In a gross 
 \begin{Figure}
  \centering
  \includegraphics[width=0.8\linewidth]{images/Gyrus_Dentatus_40x}
+ \captionsetup{width=0.8\linewidth, font=small}
  \captionof{figure}{Neurons in the dentate gyrus of an epilepsy patient.}
 \end{Figure}
 
@@ -73,6 +75,7 @@ Such a model is useful for calculating continuous values as well as for classifi
 \begin{Figure}
  \centering
  \includegraphics[width=0.7\linewidth]{images/mnist}
+ \captionsetup{width=0.8\linewidth, font=small}
  \captionof{figure}{Handwritten digits in the MNIST data set.}
 \end{Figure}
 
@@ -130,8 +133,6 @@ f = \begin{bmatrix}
 \]
 the result of convolving $a$ over $f$ would be:
 \subsubsection{Multitask learning}
-
-The concept of multitask learning is both simple and ingenious. It's foundation is that, when training a neural network to predict a certain task given a set of parameters, by training it to predict another or maybe several tasks instead of a single one, each individual prediction will reach a better accuracy. The idea behind it is to use domain-specific information in the training signals of related tasks, to improve the generalization of a model. By training a model to have good predictions on more than one task, data dependent noise related to one task will then be identified easier as something to be ignored and thereby the general accuracy will increase. Furthermore when having a limited data set with a lot of noise, the model will, by having several tasks to predict, have help in focusing the attention on the relevant features that lead to correct predictions, and ignoring data specific features that might lead to over fitting. 
 
 \subsection{Prior research in this field}
 
