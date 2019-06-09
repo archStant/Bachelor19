@@ -87,7 +87,47 @@ As with the number of layers, the depth affects both model potential complex pre
 \subsubsection{Kernel size}
 Fortæl om kernel sizes og om hvordan vi først prøvede én størrelse på dem alle og siden at variere størrelsen (lav evt. en reference til nogen af dem der har trænet på MNIST og deres kernel sizes), lav en tabel og to grafer.
 
-In the article by Xi et al, a kernel size of 11 was chosen on the basis that the average length 
+In the article by Xi et al, a kernel size of 11 was chosen on the basis that the average length of an $\alpha$-helix chain, and in accordance with this we tested values in the vicinity. For the sake of padding we stuck to uneven values.\\
+While the first tests fokus on keeping the same size of kernel throughout the layers in the model, we also performed a series of tests using increasing, decreasing, pyramid-shaped and valley-shaped progressions of kernel sizes.
+
+% Please add the following required packages to your document preamble:
+% \usepackage[normalem]{ulem}
+% \useunder{\uline}{\ul}{}
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccccc}
+\multicolumn{7}{c}{\textbf{Kernel sizes}} \\
+\multicolumn{7}{c}{\textit{Learning rate = 0.0005, layer depth = 90, 3 hidden layers, batch size = 4}} \\ \hline
+\multicolumn{1}{l|}{} & \multicolumn{3}{c|}{{\ul Validation set}} & \multicolumn{3}{c}{{\ul Test set}} \\
+\multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}Kernel\\ Size\end{tabular}} & Q8 & \begin{tabular}[c]{@{}c@{}}Relative\\ solvent\\ accessibility\end{tabular} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}Absolute\\ solvent\\ accessibility\end{tabular}} & Q8 & \begin{tabular}[c]{@{}c@{}}Relative\\ solvent\\ accessibility\end{tabular} & \begin{tabular}[c]{@{}c@{}}Absolute\\ solvent\\ accessibility\end{tabular} \\ \hline
+\multicolumn{1}{c|}{5} & 71.00\% & 82.54\% & \multicolumn{1}{c|}{81.20\%} & 70.455\% & 82.405\% & 80.657\% \\
+\multicolumn{1}{c|}{7} & 71.50\% & 82.24\% & \multicolumn{1}{c|}{81.00\%} & 71.616\% & 82.241\% & 80.611\% \\
+\multicolumn{1}{c|}{9} & 71.44\% & 82.95\% & \multicolumn{1}{c|}{81.24\%} & 71.409\% & 82.363\% & 80.714\% \\
+\multicolumn{1}{c|}{11} & 70.94\% & 82.15\% & \multicolumn{1}{c|}{80.52\%} & 70.957\% & 82.592\% & 80.742\% \\
+\multicolumn{1}{c|}{13} & 70.82\% & 82.49\% & \multicolumn{1}{c|}{80.97\%} & 70.903\% & 82.389\% & 80.605\% \\ \hline
+\multicolumn{1}{c|}{{[}5,7,9,11{]}} & 71.55\% & 82.98\% & \multicolumn{1}{c|}{81.48\%} & 71.636\% & 82.525\% & 80.963\% \\
+\multicolumn{1}{c|}{{[}7,9,11,13{]}} & 71.17\% & 82.75\% & \multicolumn{1}{c|}{81.20\%} & 71.284\% & 82.778\% & 80.856\% \\
+\multicolumn{1}{c|}{{[}11,9,7,5{]}} & 71.21\% & 82.43\% & \multicolumn{1}{c|}{81.00\%} & 71.387\% & 82.221\% & 80.712\% \\
+\multicolumn{1}{c|}{{[}7,9,9,7{]}} & 70.78\% & 82.88\% & \multicolumn{1}{c|}{81.34\%} & 71.588\% & 82.673\% & 80.956\% \\
+\multicolumn{1}{c|}{{[}9,7,7,9{]}} & 71.20\% & 82.87\% & \multicolumn{1}{c|}{81.26\%} & 71.424\% & 82.365\% & 80.845\%
+\end{tabular}
+\end{table}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{../graphs/new/kernel_sizes_1}
+  \caption{Constant kernel size.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{../graphs/new/kernel_sizes_2}
+  \caption{Varying kernel size.}
+\end{figure}
+
+\noindent As with the layer depth, not all values are shown in the graph - refer to the appendix for a graph with all values.\\
+It became clear that using a progressively rising size of kernels a significant increase was seen in accuracy. For the final model we opted to use kernel sizes [5, 7, 9, 11].\\
+What is interesting about the data shown above, is that while one would expect larger kernel sizes to increase performance, or at the very least not decrease it (since the model should learn just to 'ignore' extra space in the kernel), the model's performance did indeed decrease as the kernel sizes grew.
+
 
 
 \subsection{Final predictive capabilities}

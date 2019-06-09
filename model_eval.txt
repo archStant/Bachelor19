@@ -1,0 +1,17 @@
+CNN(
+  (conv1): Sequential(
+    (0): Conv1d(44, 80, kernel_size=(5,), stride=(1,), padding=(2,))
+    (1): ReLU()
+  )
+  (conv2): Sequential(
+    (0): Conv1d(80, 80, kernel_size=(7,), stride=(1,), padding=(3,))
+    (1): ReLU()
+  )
+  (conv3): Sequential(
+    (0): Conv1d(80, 80, kernel_size=(9,), stride=(1,), padding=(4,))
+    (1): ReLU()
+  )
+  (out): Sequential(
+    (0): Conv1d(80, 9, kernel_size=(11,), stride=(1,), padding=(5,))
+  )
+)
