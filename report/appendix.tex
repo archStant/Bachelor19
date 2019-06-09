@@ -1,5 +1,6 @@
 \section{Appendix}
 
+\section*{Amino acids}
 \begin{table}[h]
 \caption{Amino acids}
 \centering
@@ -29,7 +30,9 @@ Y		& Tyrosine		\\
 \end{tabular}
 \end{table}
 
-\begin{table}
+\section*{Secondary structures}
+
+\begin{table}[h]
 \caption{Q8 structure overview}
 \centering
 \begin{tabular}{l|l}
@@ -59,3 +62,29 @@ C (coil)	& I, S, T, L				\\
 
 \end{tabular}
 \end{table}
+
+\section*{Batch sizes}
+A comparison of acheived accuracies on the validation and test set respectively performed on the unoptimized multi-task model can be seen below.
+\begin{table}[h]
+\centering
+\begin{tabular}{lllllll}
+\multicolumn{7}{c}{Layer debth = 80, kernel size = 11, learning rate = 0.00025, 3 hidden layers}                                                                                                                                                                                                                                                                                   \\ \hline
+           & \multicolumn{3}{c|}{Validation set}                                                                                                                                                               & \multicolumn{3}{c}{Test set}                                                                                                                                      \\ \hline
+Batch size & Q8 & \begin{tabular}[c]{@{}l@{}}Relative\\solvent\\accessibility\end{tabular} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Absolute\\solvent\\accessibility\end{tabular}} & Q8 & \begin{tabular}[c]{@{}l@{}}Relative\\ solvent\\ accessibility\end{tabular} & \begin{tabular}[c]{@{}l@{}}Absolute\\ solvent\\accessibility\end{tabular} \\ \hline
+1          & 71.25\%     & 82.98\%                                                                       & \multicolumn{1}{l|}{81.41\%}                                                                       & 70.973\%    & 82.184\%                                                                   & 80.572\%                                                                \\
+2          & 71.25\%     & 82.76\%                                                                       & \multicolumn{1}{l|}{81.21\%}                                                                       & 70.951\%    & 82.523\%                                                                   & 80.847\%                                                                \\
+4          & 70.25\%     & 82.28\%                                                                       & \multicolumn{1}{l|}{80.84\%}                                                                       & 70.438\%    & 82.103\%                                                                   & 80.570\%                                                                \\
+8          & 69.42\%     & 82.51\%                                                                       & \multicolumn{1}{l|}{80.73\%}                                                                       & 69.557\%    & 82.012\%                                                                   & 80.319\%                                                                \\
+16         & 68.15\%     & 82.15\%                                                                       & \multicolumn{1}{l|}{80.42\%}                                                                       & 68.459\%    & 81.595\%                                                                   & 79.924\%                                                                \\
+32         & 66.94\%     & 81.61\%                                                                       & \multicolumn{1}{l|}{79.85\%}                                                                       & 67.279\%    & 81.196\%                                                                   & 79.483\%                                                                \\
+64         & 65.10\%     & 80.97\%                                                                       & \multicolumn{1}{l|}{79.25\%}                                                                       & 65.100\%    & 80.644\%                                                                   & 78.899\%                                                               
+\end{tabular}
+\end{table}
+
+\section*{Layer depth}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{../graphs/new/layer_width_2}
+  \caption{Accuracy on the validation set with varying layer depth.}
+\end{figure}
