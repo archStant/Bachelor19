@@ -203,6 +203,12 @@ In implementing a procedure to evaluate the accuracy of a prediction, we first c
 Of course at this point the model would also be evaluated on its accurate prediction of padding (a task that proved remarkably managable), and thus could achieve arbitrarily high accuracy just by adding more padding to the set. To avoid this, we construct a masking matrix from the values in the target set that are \texttt{NoSeq}. We can then use this mask to filter out the irrelevant values in our matrix of correct and false predictions.
 
 Finally taking the mean of this, now filtered, matrix of prediction correctness produces the percentage of the relevant predictions that were in fact correct.
+\begin{Figure}
+ \centering
+ \includegraphics[width=0.8\linewidth]{../graphs/accuracy}
+ \captionsetup{width=0.8\linewidth, font=small}
+ \captionof{figure}{Calculating accuracy.}
+\end{Figure}
 
 \subsection{Single-task solvent accessibility prediction}
 For comparison purposes, we also implemented a convolutional neural network to predict the two solvent accessibility features alone. This model is in most regards similar to the above, only with fewer output-channels and different final activation and loss functions.\\
