@@ -25,10 +25,40 @@ Since many people has done this, and the application and importance of this in t
 Proteins are large biomolecules that has a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. KILDEKILDEKILDE!!. They consist of a chain of amino acids, where it is the sequence of the amino acids that determine the protein. The linear sequence of amino acids in a protein is also known as a proteins primary structure. 
 
 \subsubsection{Secondary Structures}
-The secondary structure of a protein largely determined by it's primary structure. Among the many reasons for predicting the secondary structure, using it as a stepping stone for trying to find the three-dimensional structure of a protein, which is normally difficult to assess. The secondary structure itself is the three-dimensional form of local segments of the protein \citep[p.~2]{Qi-et-al-2012}.
-The secondary structure is normally divided into either 3 or 8 groups in the literature often named Q3 and Q8. Using the DSSP alphabet for giving the groups letters, the groups of Q3 are helix(H), sheets(B) and coils(C).KILDE KILDE
-When predicting Q3 secondary structures current state of the art has it's accuracy percentage in the mid eighties. This was for a long time the secondary structure prediction that was done, but due to advances in technology and research, the harder but more detailed Q8 predictions are gaining more attention. According to the two articles used as a starting point for this thesis, which will be further showed later, the accuracy for current state of the art when predicting Q8 secondary structure is around 72-74\%(KILDKILDEKILDE)
-Again using the DSSP alphabet for giving letters, the categories of Q8 are: alpha Helix(H), residue in isolated beta bridge(B), extended strand(E) 3-helix(G), 5-helix(I), hydrogen bonded turn(T), bent(S), loop(L). Those are the three dimensional forms a protein can take in a local segment.
+The secondary structures are the three dimensional forms a protein can take in a local segment and are largely determined by it's primary structure. Among the many reasons for predicting the secondary structure, using it as a stepping stone for trying to find the three-dimensional structure of a protein, which is normally difficult to assess. The secondary structure itself is the three-dimensional form of local segments of the protein \citep[p.~2]{qi-et-al-2012}.
+The secondary structure is divided into groups of either 3 or 8 types of structure, named Q3 and Q8 \citep{zhou-and-troyanskaya-2014}. 
+Using the DSSP alphabet \citep{kabsch-and-sander-1983} 
+for giving the groups letters, the categories of Q8 are as shown in the Q8 table \citep{qi-et-al-2012}.
+\begin{table}[H]
+\caption{Q8 structure overview}
+\centering
+\begin{tabular}{l|l}
+\hline 
+Letter	& Secondary Structure 			\\ \hline
+H	& Alpha-helix						\\
+B	& residue in isolated beta bridge	\\
+E	& extended strand					\\
+G	& 3-helix							\\
+I	& 5-helix							\\
+T	& hydrogen bonded turn				\\
+S	& bend								\\
+L	& loop								\\
+\end{tabular}
+\end{table}
+According to the two articles used as a starting point for this thesis, which will be further showed later, the accuracy for current state of the art when predicting Q8 secondary structure is around 72-74\% \citep{zhou-and-troyanskaya-2014, qi-et-al-2012}. 
+When predicting Q3 secondary structures current state of the art has it's accuracy percentage in the mid eighties. This was for a long time the secondary structure prediction that was done, but due to advances in technology and research, the harder but more detailed Q8 predictions are gaining more attention. 
+Again using the DSSP alphabet for giving letters, the groups of Q3 are as in the Q3 table \citep{qi-et-al-2012}.
+\begin{table}[H]
+\caption{Q3 structure overview}
+\centering
+\begin{tabular}{l|l}
+\hline
+Letter		& Q8 structures in group	\\ \hline
+H			& H, G						\\
+B			& B, E						\\
+C (coil)	& I, S, T, L				\\
+\end{tabular}
+\end{table}
 
 
 \subsubsection{Solvent accessible surface area}
@@ -143,11 +173,13 @@ f = \begin{bmatrix}
 the result of convolving $a$ over $f$ would be:
 \subsubsection{Multitask learning}
 
+The concept of multitask learning is both simple and ingenious. It's foundation is that, when training a neural network to predict a certain task given a set of parameters, by training it to predict another or maybe several tasks instead of a single one, each individual prediction will reach a better accuracy. The idea behind it is to use domain-specific information in the training signals of related tasks, to improve the generalization of a model. By training a model to have good predictions on more than one task, data dependent noise related to one task will then be identified easier as something to be ignored and thereby the general accuracy will increase. Furthermore when having a limited dataset with a lot of noise, the model will, by having several tasks to predict, have help in focusing the attention on the relevant features that lead to correct predictions, and ignoring data specific features that might lead to overfitting. 
+
 \subsection{Prior research in this field}
 
 As protein secundary structure prediction is an important field for several scientific fields with ongoing research and real world application, it follows that there exists a lot of papers on the subject. We have used 4 articles extensively for this thesis. As such we wish to shortly present them and the content they have brought to this thesis. 
 The main paper and starting point for our thesis was Zhou and Troyanskaya’s “Deep Supervised and Convolutional Generative Stochastic Network for Protein Secondary Structure prediction”. The dataset we have been using for training our own network was the one they made for this proceeding. Besides presenting the dataset and giving a deeper understanding of it, the paper gave other insights as well. Though a lot of the methods and architecture they present are outside the scope of this thesis, Zhou and Troyanskaya’s paper gives a good understanding of what a neural network is and further gave an idea about what we could expect accuracy-wise when trying to predict protein secondary structures. 
-The next paper we used were Qi et al.’s “A unified Multitask Architecture for Predicting Local Protein Properties”. As Zhou and Troyanskaya had used the method from this paper to discretize solvent accessibility scores to absolute and releative solvent accessibility, it brought to the table further understanding of our dataset. Furthermore the paper is about using multitask learning for secondary structure prediction, and as the final goal of this thesis is to understand and implement a convolutional neural network using multitask learning, a lot of inspiration was drawn from this paper. Both Zhou and Troyanskaya and Qi et al. have used DSSP (cite KABUSHKILDE) to create their datasets. But, we have used Qi et al.’s explanation of the 8-letter alphabet to make the Q3+Q8 table, explaining the secondary structures we are predicting with our network. Lastly this paper gives a good understanding and basic introduction to the biological background of proteins and the features of the protein one can try to predict. 
+The next paper we used were Qi et al.’s “A unified Multitask Architecture for Predicting Local Protein Properties”. As Zhou and Troyanskaya had used the method from this paper to discretize solvent accessibility scores to absolute and releative solvent accessibility, it brought to the table further understanding of our dataset. Furthermore the paper is about using multitask learning for secondary structure prediction, and as the final goal of this thesis is to understand and implement a convolutional neural network using multitask learning, a lot of inspiration was drawn from this paper. Lastly this paper gives a good understanding and basic introduction to the biological background of proteins and the features of the protein one can try to predict. 
 Our two last research papers are Wang et al.’s “Protein Secondary Structure Prediction Using Deep Convolutional Neural Fields” and Ruder’s ”An Overview of Multi-Task Learning in Deep Neural Networks”.  As Wang et al. also are predicting secondary structure using convolution we took inspiration from here as well, especially when starting out looking to optimize our hyperparameters. Wang et al. also gave us and even better and more updated understanding of expectancy for accuracy as they achieve ~73 \% accuracy on a CullPDB dataset. Ruder being our last main paper, gives a good introduction to the methodology of multitask learning and the ideas behind. As such much of our methodology concerning multitask learning will come from his paper.
 
 
