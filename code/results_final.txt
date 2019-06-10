@@ -1,7 +1,7 @@
 Alle trænet i 20 epoker
 
 Single task:
-Step [1200]:	Train:[Loss: 0.25457] 	 Validation:[Accuracy: 71.5743%]  Test:[Accuracy: 71.5955%]
+Step [1300]:	Train:[Loss: 0.10750] 	 Validation:[Accuracy: 71.2173%]  Test:[Accuracy: 71.0878%]
 
 Multitask:
         valid                   train
@@ -11,4 +11,4 @@ Multitask:
 Solvent:
 Valid               test
 rel     abs     rel     abs
-0.8307	0.8140	0.8253	0.8084
+0.8278	0.8134	0.8241	0.8041
