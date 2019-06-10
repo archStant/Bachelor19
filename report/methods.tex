@@ -169,7 +169,7 @@ where
 \subsubsection{Hardware}
 In terms of performing the calculations, all of our training of the model was done on a Dell PC with a 7th gen octocore Intel Core i7 CPU, 16GB of RAM and a Nvidia GeForce GTX 1050TI GPU with 4GB of RAM and 768 cores running Linux.
 
-\subsection{Single-task learning}
+\subsection{Single-task secondary structure prediction}
 We built a convolutional neural network, implemented in Python using PyTorch in order to predict amino acid secondary structures from the amino acid residues as well as the sequence profile. We tested variations on number of layers, layer depth, kernel sizes and learning rate (results below) in order to maximize performance of the model. 
 
 \subsubsection{Architecture}
@@ -203,6 +203,12 @@ Of course at this point the model would also be evaluated on its accurate predic
 
 Finally taking the mean of this, now filtered, matrix of prediction correctness produces the percentage of the relevant predictions that were in fact correct.
 
+\subsection{Single-task solvent accessibility prediction}
+For comparison purposes, we also implemented a convolutional neural network to predict the two solvent accessibility features alone. This model is in most regards similar to the above, only with fewer output-channels and different final activation and loss functions.\\
+One could think of the types of these three (structures, relative and absolute solvency) output as identical; the structure labels are a probability distribution while in a certain sense so are the solvent accessibility features - only a probability between two possible outcomes.\\
+Nonetheless different final activation function were needed for the two latter, since performing a softmax on the binary output would always yield a 1. Thus the two solvent features are activated by a sigmoid function - effectively mapping their value to a probability between 0 and 1. Further, the loss function, now only distinguishing between two possible classes (0 and 1) should be the Binary Cross Entropy.\\
+rom a technical implementational perspective, as how in the previous model the SoftMax function was already included in the PyTorch implementation of BCELoss, in this case the sigmoid function is not explicitly stated in the model, as it is already included in the PyTorch module \texttt{BCEWithLogitsLoss} - the Binary Cross Entropy loss function.
+
 \subsection{Multi-task learning}
 %\subsubsection{Generelt om Multi-task learning}
 There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers. This approach provides a very strong line of defence against overfitting, as forcing the model to optimize on several predictive capabilities makes it less  susceptible to representing the aspects of the training data that are not representative of general tendencies in the domain. 
@@ -213,8 +219,7 @@ On the grounds that the data set we are working with is somewhat limited (5926 p
 
 \subsubsection{Architecture}
 Having decided on employing hard parameter sharing, we implemented the model in much a similar fashion to the single-task model explained above (i.e. convolutional layers, ReLU, padding, etc.). What sets the two models apart is the fact that in the final layer of the multi-task model the data is split up into the three output sets, secondary structure and relative/absolute solvent accessibility.\\
-One could think of the types of these three output as identical; the structure labels are a probability distribution while in a certain sense so are the solvent accessibility features - only a probability between two possible outcomes.\\
-Nonetheless different final activation function were needed for the two, since performing a softmax on the binary output would always yield a 1. Thus the two solvent features are activated by a sigmoid function - effectively mapping their value to a probability between 0 and 1.\\
+\\
 
 \begin{Figure}
  \centering
@@ -222,8 +227,6 @@ Nonetheless different final activation function were needed for the two, since p
  \captionsetup{width=0.8\linewidth, font=small}
  \captionof{figure}{Model architecture: The lightning represents one or more similar convolutional layers.}
 \end{Figure}
-
-\noindent From a technical implementational perspective, as how in the previous model the SoftMax function was already included in the PyTorch implementation of BCELoss, in this case the sigmoid function is not explicitly stated in the model, as it is already included in the PyTorch module \texttt{BCEWithLogitsLoss} - the Binary Cross Entropy loss function.
 
 \subsubsection{Training}
 Utilizing the PyTorch loss function, autogradient and optimizer-libraries, implementing a model with essentially three losses is easy. As mentioned above, the model had a Cross Entropy loss for the secondary structure prediction, as well as two Binary Cross Entropy losses for the two solvency features. Training the model with regards to minimizing these losses is acheived simply by letting a variable be the sum of the three, and then letting the library automatically backtrace each of the parameters in the model via this value.
