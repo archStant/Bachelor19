@@ -3,26 +3,26 @@ We would like to start presenting the motivation for this thesis, and the concep
 The purpose with the thesis is to learn how neural networks is based theoretically, to learn how they can be applied to solve specific tasks, in this case to predict proteins' properties based on their composition of amino acids, and a basic understanding of those. \\\\
 We expect the thesis to have the following parts:\\
 - A rudimentary implementation of a neural network without use of newer tools, with the motivation to be able to explain the theoretical background for it.\\
-- A real implementation of a articifical neural network based on established frameworks, as Pytorch, with the motivation to be able to predict proteins secondary structures, based on a sequence of amino acids. \\
+- A real implementation of a artificial neural network based on established frameworks, as Pytorch, with the motivation to be able to predict proteins secondary structures, based on a sequence of amino acids. \\
 - A similar implementation with the motivation of being able to predict Solvent Accessible Surface Area based on amino acid sequences. \\
-- A comparison of result from the two above mentioned models, contrasted with a model that use multi-tasking to preduct both of those properties.\\ 
+- A comparison of result from the two above mentioned models, contrasted with a model that use multi-tasking to predict both of those properties.\\ 
 
-Using this description as a guide through our work, we started with a look at the rudementary implentation of a neural network. As a starting point for this, we were given a jupyter-notebook with some introductory explanations and excercises to do.
+Using this description as a guide through our work, we started with a look at the rudimentary implementation of a neural network. As a starting point for this, we were given a jupyter-notebook with some introductory explanations and exercises to do.
 It can be found at https://github.com/dennybritz/nn-from-scratch/blob/master/nn-from-scratch.ipynb.
-Besides doing the excercises and playing with the code to get a better understanding of the methods and concepts, we afterwords implemented the same neural network using pytorch. 
-This gave us a basis understanding of where to start coding our real neural networks. As it was used as a practice excersise for us to get started and giving a base understanding, we have decided not to include the code or excersises in the thesis, as it wouldn't add anyting relevant, though the understanding gained is part of our explaination in the method section of the thesis. Before going there though, we would like to finish introducing the background for this thesis.
+Besides doing the exercises and exploring possibilities with the code to get a better understanding of the methods and concepts, we afterwards implemented the same neural network using pytorch. 
+This gave us a basis understanding of where to start coding our real neural networks. As it was used as a practice exercise for us to get started and giving a base understanding, we have decided not to include the code or exercises in the thesis, as it wouldn't add anything relevant, though the understanding gained is part of our explanation in the method section of the thesis. Before going there though, we would like to finish introducing the background for this thesis.
 
 \subsection{Motivation}
 In computer science today, one of the areas that are the most in the public eye and covered by media and politicians alike is the area of Artificial Intelligence. Within this area concepts like deep learning, machine learning and neural networks are showing up repeatedly as buzzwords and central areas for future research and use.\\
 It is in this context the motivation to have neural networks as a topic for this thesis has it's origins. This thesis' purpose is threefold. The first is to give an introductory understanding of the topic of machine learning and more specifically neural networks. This includes a basic understanding of the theoretical basis of neural networks. \\
-Secondly the purpose is to widen this understanding of neural networks by implementing one to handle a specific task. This task is to predict secondary structure of proteins based on their amino acid composition. Lastly the purpose is to give an rudementary understanding of of those proteins to give context to the use of the neural network.\\
+Secondly the purpose is to widen this understanding of neural networks by implementing one to handle a specific task. This task is to predict secondary structure of proteins based on their amino acid composition. Lastly the purpose is to give an rudimentary understanding of of those proteins to give context to the use of the neural network.\\
 The motivation for choosing protein secondary structure prediction for the neural networks also has several reasons. 
 The textbook example when learning about neural networks and implementing them is to identify a handwritten number between 0 and 9. This neural network is often trained on the MNIST dataset of handwritten numbers. \\
-Since many people has done this, and the application and importance of this in the real world is limited there would be very little content to this thesis if that had been the context. Protein secondary structure prediction on the other hand has more real world applications and are an important branch of bioinformatics, and is used in both medicine and biotechnology. Since it is an important topic with real world use, it is an area that is still under research to improve the prediction accuracy. As such it gives a current and relevant context for this thesis as an interesting introduction to neural networks and their application.   
+Since many people has done this, and the application and importance of this in the real world is limited there would be very little content to this thesis if that had been the context. We will come back to the MNIST dataset of numbers though, to explain some of the basics of neural networks. Protein secondary structure prediction on the other hand has more real world applications and are an important branch of bioinformatics, and is used in both medicine and biotechnology. Since it is an important topic with real world use, it is an area that is still under research to improve the prediction accuracy. As such it gives a current and relevant context for this thesis as an interesting introduction to neural networks and their application.   
 
 
 \subsection{Proteins}
-Proteins are large biomolecules that has a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. KILDEKILDEKILDE!!. They consist of a chain of amino acids, where it is the sequence of the amino acids that determine the protein. The linear sequence of amino acids in a protein is also known as a proteins primary structure. 
+Proteins are large bio molecules that has a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. KILDEKILDEKILDE!!. They consist of a chain of amino acids, where it is the sequence of the amino acids that determine the protein. The linear sequence of amino acids in a protein is also known as a proteins primary structure. 
 
 \subsubsection{Secondary Structures}
 The secondary structures are the three dimensional forms a protein can take in a local segment and are largely determined by it's primary structure. Among the many reasons for predicting the secondary structure, using it as a stepping stone for trying to find the three-dimensional structure of a protein, which is normally difficult to assess. The secondary structure itself is the three-dimensional form of local segments of the protein \citep[p.~2]{qi-et-al-2012}.
@@ -156,7 +156,8 @@ In laymans terms, by doing this one gets a matrix of 'change your weights by thi
 
 \subsubsection{Convolutional neural networks}
 Before talking about convolutional neural networks, we have to specify what a convolution is. Again the MNIST data set serves as an obvious example.\\
-One can understand each of the images in the data set as a matrix of $26\times26$ values in the range of 0 - 255. The formal definition of a convolution is \emph{TODO}, however the more practical explanation is that it is the resulting matrix of the product of a matrix and a filter. For example if one has the matrix $a$ and the filter $f$:
+One can understand each of the images in the data set as a matrix of $28\times28$ values in the range of 0 - 255. The word convolution comes from the latin convolvere, meaning to roll or to coil and still has a similar meaning in english today. In math convolution is an operation where, for two functions f(x) and g(x), one is shifted across the other, which result in a third function h(x) that express the the intersection of the two functions. As such h(x) explains how the shape of one of the functions is changed by the other. 
+However the more practical explanation in the case of our thesis, is that it is the resulting matrix of the product of a matrix and a filter. For example if one has the matrix $a$ and the filter $f$:
 \[
 a = \begin{bmatrix}
        2 & 3 & 4           \\[0.3em]
@@ -165,12 +166,103 @@ a = \begin{bmatrix}
      \end{bmatrix}
 \hspace*{1cm}
 f = \begin{bmatrix}
-       0 & 1 & 0           \\[0.3em]
-       1 & 1 & 1 \\[0.3em]
-       0 & 1 & 0
+       0 & 1 \\[0.3em]
+       1 & 0        
      \end{bmatrix}     
 \]
-the result of convolving $a$ over $f$ would be:
+
+the resulting output of convolving $f$ over $a$ would be:
+
+\[
+\begin{bmatrix}
+       4 & 6 \\[0.3em]
+       2 & 4        
+     \end{bmatrix}     
+\]
+
+where convolving works as follows:
+\[
+\begin{bmatrix}
+       \textcolor{red}2 & \textcolor{red}3 & 4           \\[0.3em]
+       \textcolor{red}1 & \textcolor{red}2 & 3 \\[0.3em]
+       0 & 1 & 2
+     \end{bmatrix}
+\hspace*{0.5cm}
+*
+\hspace*{0.5cm}
+\begin{bmatrix}
+       0 & 1 \\[0.3em]
+       1 & 0        
+     \end{bmatrix}     
+\hspace*{1cm}
+ = \begin{bmatrix}
+       \textcolor{red}4 &  \\[0.3em]
+         &         
+     \end{bmatrix}
+\]
+
+\[
+\begin{bmatrix}
+       2 & \textcolor{red}3 & \textcolor{red}4           \\[0.3em]
+       1 & \textcolor{red}2 & \textcolor{red}3 \\[0.3em]
+       0 & 1 & 2
+     \end{bmatrix}
+\hspace*{0.5cm}
+*
+\hspace*{0.5cm}
+\begin{bmatrix}
+       0 & 1 \\[0.3em]
+       1 & 0        
+     \end{bmatrix}     
+\hspace*{1cm}
+ = \begin{bmatrix}
+       4 & \textcolor{red}6 \\[0.3em]
+         &         
+     \end{bmatrix}
+\]
+\[
+\begin{bmatrix}
+       2 & 3 & 4           \\[0.3em]
+       \textcolor{red}1 & \textcolor{red}2 & 3 \\[0.3em]
+       \textcolor{red}0 & \textcolor{red}1 & 2
+     \end{bmatrix}
+\hspace*{0.5cm}
+*
+\hspace*{0.5cm}
+\begin{bmatrix}
+       0 & 1 \\[0.3em]
+       1 & 0        
+     \end{bmatrix}     
+\hspace*{1cm}
+ = \begin{bmatrix}
+       4 & 6 \\[0.3em]
+       \textcolor{red}2 &         
+     \end{bmatrix}
+\]
+\[
+\begin{bmatrix}
+       2 & 3 & 4           \\[0.3em]
+       1 & \textcolor{red}2 & \textcolor{red}3 \\[0.3em]
+       0 & \textcolor{red}1 & \textcolor{red}2
+     \end{bmatrix}
+\hspace*{0.5cm}
+*
+\hspace*{0.5cm}
+\begin{bmatrix}
+       0 & 1 \\[0.3em]
+       1 & 0        
+     \end{bmatrix}     
+\hspace*{1cm}
+ = \begin{bmatrix}
+       4 & 6 \\[0.3em]
+       2 & \textcolor{red}4        
+     \end{bmatrix}
+\]
+
+As can be seen on the above example there is a couple of things to consider in regard to convolution. First is, when done as above, the size of the input matrix is different than the output matrix, due to the filter size. This filter is also known as the kernel, so when kernel size is mentioned, it is the size of the filter used for convolution. If it had been important to have an output matrix of the same size as the input, a way to achieve this would be using zero padding. Zero padding would be adding zeros to the input matrix so it became a 4x4 matrix, so when when shifting the kernel across, the output would be the original 3x3.  
+
+
+
 \subsubsection{Multitask learning}
 
 The concept of multitask learning is both simple and ingenious. It's foundation is that, when training a neural network to predict a certain task given a set of parameters, by training it to predict another or maybe several tasks instead of a single one, each individual prediction will reach a better accuracy. The idea behind it is to use domain-specific information in the training signals of related tasks, to improve the generalization of a model. By training a model to have good predictions on more than one task, data dependent noise related to one task will then be identified easier as something to be ignored and thereby the general accuracy will increase. Furthermore when having a limited dataset with a lot of noise, the model will, by having several tasks to predict, have help in focusing the attention on the relevant features that lead to correct predictions, and ignoring data specific features that might lead to overfitting. 
