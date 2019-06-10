@@ -114,13 +114,13 @@ While the first tests fokus on keeping the same size of kernel throughout the la
 \end{table}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\linewidth]{../graphs/new/kernel_sizes_1}
+  \includegraphics[width=\linewidth]{../graphs/new/kernel_sizes_2}
   \caption{Constant kernel size.}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\linewidth]{../graphs/new/kernel_sizes_2}
+  \includegraphics[width=\linewidth]{../graphs/new/kernel_sizes_1}
   \caption{Varying kernel size.}
 \end{figure}
 
@@ -131,12 +131,138 @@ What is interesting about the data shown above, is that while one would expect l
 
 
 \subsection{Final predictive capabilities}
-Forklar hvordan vi fandt frem til vores hyperparametre på multi-task modellen og så anvendte de samme på single-task. Skriv noget tekst om hvordan vi på test-sættet nåede op på so-and-so meget præcision på hhv. den ene og anden model og hhv. strukturer og solvent egenskaber, samt sammeligning af resultatet på test- og valideringssæt.
+\textit{Forklar hvordan vi fandt frem til vores hyperparametre på multi-task modellen og så anvendte de samme på single-task. Skriv noget tekst om hvordan vi på test-sættet nåede op på so-and-so meget præcision på hhv. den ene og anden model og hhv. strukturer og solvent egenskaber, samt sammeligning af resultatet på test- og valideringssæt.}
 
+Having performed the series of tests described above we settled on the following architecture:
+\begin{table}[H]
+\centering
+\begin{tabular}{lr}
+\multicolumn{2}{c}{\textbf{Final model architecture}} \\ \hline
+\multicolumn{1}{l|}{\textit{Hyperparameter}} & \textit{Value} \\ \hline
+\multicolumn{1}{l|}{No. of hidden layers} & 3 \\
+\multicolumn{1}{l|}{Learning rate} & 0.0005 \\
+\multicolumn{1}{l|}{Layer depth} & 90 \\
+\multicolumn{1}{l|}{Kernel sizes} & {[}5, 7, 9, 11{]}
+\end{tabular}
+\end{table}
 
-\subsection{Comparison}
-Forklar hvordan de to modeller ender med næsten samme præcision, omend multi-task modellen tager langt længere tid om at komme derop. De convergerer (jeg tror ordet er 'predictive ceiling') begge omkring de 68.5\%, men for single allerede omkring 10 epoker medens multi skal bruge 25 epoker.
+\noindent Implementing this with PyTorch gave us the following evaluation of the model:
+\begin{lstlisting}
+CNN(
+  (conv1): Sequential(
+    (0): Conv1d(44, 90, kernel_size=(5,), stride=(1,), padding=(3,))
+    (1): ReLU()
+  )
+  (conv2): Sequential(
+    (0): Conv1d(90, 90, kernel_size=(7,), stride=(1,), padding=(4,))
+    (1): ReLU()
+  )
+  (conv3): Sequential(
+    (0): Conv1d(90, 90, kernel_size=(9,), stride=(1,), padding=(5,))
+    (1): ReLU()
+  )
+  (out): Sequential(
+    (0): Conv1d(90, 11, kernel_size=(11,), stride=(1,), padding=(6,))
+  )
+)
+\end{lstlisting}
+\noindent Note that the architecture for the three models was essentially the same, however differed in implementation by the way the data was split in the end, the activation functions and the loss functions, not shown in the evaluation above but explained earlier in this paper.\\
+\\
+We then allowed the three models to train on the data set for 20 epochs each, monitoring how they performed on the validation and test during this time. It became clear that all of the models began to overfit to the training set at some point during this training, so we also recorded when the model was at its best for comparison purposes.
 
+\subsubsection{Solvent accessibility}
+In the case of relative solvent accessibility the multi-task learning model performed almost identically to the single-task model, while the single-task slightly outperformed the multitask model in regards to the absolute solvent accessibility.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lclcl}
+ & \multicolumn{4}{c}{\textbf{Relative Solvent Accessibility}} \\
+ & \multicolumn{2}{c|}{\textit{Validation}} & \multicolumn{2}{c}{\textit{Test}} \\ \cline{2-5} 
+ & \multicolumn{1}{l}{Epoch} & \multicolumn{1}{l|}{Accuracy} & \multicolumn{1}{l}{Epoch} & Accuracy \\
+Single-task & 13 & \multicolumn{1}{l|}{83.245\%} & 11 & 82.752\% \\
+Multi-task & 15 & \multicolumn{1}{l|}{83.263\%} & 12 & 82.763\%
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{../graphs/final/rel_final_small}
+  \caption{Peak performance on the relative solvent accessibility. Green lines represent epochs.}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lclcl}
+ & \multicolumn{4}{c}{\textbf{Absolute Solvent Accessibility}} \\
+ & \multicolumn{2}{c}{\textit{Validation}} & \multicolumn{2}{c|}{\textit{Test}} \\ \cline{2-5} 
+ & \multicolumn{1}{l}{Epoch} & \multicolumn{1}{l|}{Accuracy} & \multicolumn{1}{l}{Epoch} & Accuracy \\
+Single-task & 12 & \multicolumn{1}{l|}{81.671\%} & 11 & 81.006\% \\
+Multi-task & 11 & \multicolumn{1}{l|}{81.636\%} & 10 & 80.912\%
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{../graphs/final/abs_final_small}
+  \caption{Peak performance on the absolute solvent accessibility.}
+\end{figure}
+
+\noindent It becomes clear that the the decisions made about the parameters throughout our process were indeed made on the basis of optimizing the accuracy on the validation set. Further, the results here seem to indicate that there are noteworthy differences between the test and validation sets.\\
+As is also the case for predicting the secondary structures, the effects of overfitting are seen quite clearly. In most of the runs the models reach their predictive ceiling already around 12 or 13 epochs, before losing accuracy on the test and validations sets again as the model starts overfitting to the training set.
+%\begin{table}[]
+%\centering
+%\begin{tabular}{lclll}
+%\multicolumn{1}{c}{\textbf{}} & \multicolumn{4}{c}{\textbf{Solvent Accessibility}} \\
+% & \multicolumn{2}{c}{{\ul Single-task}} & \multicolumn{2}{c}{{\ul Multi-task}} \\
+% & Epoch & \multicolumn{1}{c}{Accuracy} & \multicolumn{1}{c}{Epoch} & \multicolumn{1}{c}{Accuracy} \\ \cline{2-5} 
+%\multicolumn{1}{l|}{Feature} & \multicolumn{4}{c|}{\textit{Validation set}} \\
+%\multicolumn{1}{l|}{Relative} & \multicolumn{1}{l}{13} & \multicolumn{1}{l|}{83.245\%} & 15 & \multicolumn{1}{l|}%{83.263\%} \\
+%\multicolumn{1}{l|}{Absolute} & \multicolumn{1}{l}{12} & \multicolumn{1}{l|}{81.671\%} & 11 & \multicolumn{1}{l|}%{81.636\%} \\ \cline{2-5} 
+%\multicolumn{1}{l|}{} & \multicolumn{4}{c|}{\textit{Test set}} \\
+%\multicolumn{1}{l|}{Relative} & \multicolumn{1}{l}{11} & \multicolumn{1}{l|}{82.752\%} & 12 & \multicolumn{1}{l|}%{82.763\%} \\
+%\multicolumn{1}{l|}{Absolute} & \multicolumn{1}{l}{11} & \multicolumn{1}{l|}{81.006\%} & 10 & \multicolumn{1}{l|}%{80.912\%}
+%\end{tabular}
+%\end{table}
+
+\subsubsection{Secondary Structures}
+By implementing multi-task learning in the model we saw a slight increase in the accuracy when predicting protein secondary structures as compared to the single-task model. We did however observe that while the two models both moved towards predictive ceilings not that far apart, the multi-task model reached it significantly faster.
+\begin{table}[h]
+\centering
+\begin{tabular}{lclcl}
+ & \multicolumn{4}{c}{\textbf{Secondary Structures Q8}} \\
+ & \multicolumn{2}{c|}{\textit{Validation}} & \multicolumn{2}{c}{\textit{Test}} \\ \cline{2-5} 
+ & \multicolumn{1}{l}{Epoch} & \multicolumn{1}{l|}{Accuracy} & \multicolumn{1}{l}{Epoch} & Accuracy \\
+Single-task & 17 & \multicolumn{1}{l|}{71.410\%} & 19 & 71.239\% \\
+Multi-task & 12 & \multicolumn{1}{l|}{71.558\%} & 11 & 71.566\%
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{../graphs/final/final_secondary_small}
+  \caption{Peak performance on the absolute solvent accessibility.}
+\end{figure}
 
 \newpage
 \begin{multicols}{2}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

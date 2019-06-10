@@ -4,9 +4,10 @@ Single task:
 Step [1300]:	Train:[Loss: 0.10750] 	 Validation:[Accuracy: 71.2173%]  Test:[Accuracy: 71.0878%]
 
 Multitask:
-        valid                   train
-        struc   rel     abs     struc   rel     abs
-1200	71.1849	82.7499	81.1354	71.6288	82.3554	80.4944	
+    valid                   train
+struc   rel     abs     struc   rel     abs
+71.6575	83.0318	81.3828	71.4681	82.4810	80.6809
+
 
 Solvent:
 Valid               test
