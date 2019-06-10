@@ -1,4 +1,11 @@
 \section{Conclusion}
+The aim this paper was to put to test the question of whether applying multi-task learning to a convolutional neural network could help improve its accuracy in regards to predicting protein secondary structures.\\
+To do this we built first a single-task model predicting Q8 secondary structures from amino acid recidues as well as the sequence profiling, as well as a similar model for predicting relative and absolute solvent accessibility.\\
+We then built another model combining these two elements in a hard parameter-sharing multi-task learning neural network, and optimized this with regards to hyperparameters number of layers, learning rate, layer depth and kernel size.\\
+Training these three models with the optimized parameters showed that while the single-task model was slightly better at predicting solvent accessibilities, the multi-task model did indeed outperform the single-task when it came to predicting secondary structures.\\
+At the offset of this project we used articles by \textbf{CITER ALLE ARTIKLERNE}, noting that authors Wang et al. had also built a convolutional neural network (DeepCNF-SS) with the same goals, reaching a Q8 accuracy of 75.2\% on the same data set as we have used, while we with our model only achieved 71.24\% on our single-task and 71.57\% on our multi-task models. Differences between DeepCNF-SS and our single-task model include both use use of regularization and the use of a Conditional Random Field as a precursive layer. \\
+Since our results showed an increase in accuracy when expanding the scope of the model to multi-task learning, one can speculate if a similar increase in performance could be expected if one was to implement multi-task learning into Wang et al.'s superior model.
+
 Modellen blev ikke bedre, men blev nogenlunde god til både at forudsige struktur og solvent-egenskaber.
 Vi kan have nogle overvejelser omkring hvad vi kunne have gjort bedre, f.eks:
 \begin{itemize}

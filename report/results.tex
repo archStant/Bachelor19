@@ -52,7 +52,7 @@ Below are the results of our tests of learning rate.
 \multicolumn{1}{l|}{0.0025} & 69.12\% & 81.67\% & \multicolumn{1}{c|}{79.59\%} & 68.590\% & 81.294\% & 79.806\%
 \end{tabular}
 \end{table}
-Not only did the non-optimal learning rates not perform as well as 0.0005, but they also trained significantly slower, as seen on the graph below.
+\noindent Not only did the non-optimal learning rates not perform as well as 0.0005, but they also trained significantly slower, as seen on the graph below.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{../graphs/new/learning_rate}
@@ -85,8 +85,6 @@ As with the number of layers, the depth affects both model potential complex pre
   \caption{Accuracy on the validation set with varying layer depth.}
 \end{figure}
 \subsubsection{Kernel size}
-Fortæl om kernel sizes og om hvordan vi først prøvede én størrelse på dem alle og siden at variere størrelsen (lav evt. en reference til nogen af dem der har trænet på MNIST og deres kernel sizes), lav en tabel og to grafer.
-
 In the article by Xi et al, a kernel size of 11 was chosen on the basis that the average length of an $\alpha$-helix chain, and in accordance with this we tested values in the vicinity. For the sake of padding we stuck to uneven values.\\
 While the first tests fokus on keeping the same size of kernel throughout the layers in the model, we also performed a series of tests using increasing, decreasing, pyramid-shaped and valley-shaped progressions of kernel sizes.
 
@@ -131,8 +129,6 @@ What is interesting about the data shown above, is that while one would expect l
 
 
 \subsection{Final predictive capabilities}
-\textit{Forklar hvordan vi fandt frem til vores hyperparametre på multi-task modellen og så anvendte de samme på single-task. Skriv noget tekst om hvordan vi på test-sættet nåede op på so-and-so meget præcision på hhv. den ene og anden model og hhv. strukturer og solvent egenskaber, samt sammeligning af resultatet på test- og valideringssæt.}
-
 Having performed the series of tests described above we settled on the following architecture:
 \begin{table}[H]
 \centering
@@ -194,7 +190,7 @@ Multi-task & 15 & \multicolumn{1}{l|}{83.263\%} & 12 & 82.763\%
 \centering
 \begin{tabular}{lclcl}
  & \multicolumn{4}{c}{\textbf{Absolute Solvent Accessibility}} \\
- & \multicolumn{2}{c}{\textit{Validation}} & \multicolumn{2}{c|}{\textit{Test}} \\ \cline{2-5} 
+ & \multicolumn{2}{c|}{\textit{Validation}} & \multicolumn{2}{c}{\textit{Test}} \\ \cline{2-5} 
  & \multicolumn{1}{l}{Epoch} & \multicolumn{1}{l|}{Accuracy} & \multicolumn{1}{l}{Epoch} & Accuracy \\
 Single-task & 12 & \multicolumn{1}{l|}{81.671\%} & 11 & 81.006\% \\
 Multi-task & 11 & \multicolumn{1}{l|}{81.636\%} & 10 & 80.912\%
@@ -229,7 +225,7 @@ By implementing multi-task learning in the model we saw a slight increase in the
 \begin{table}[h]
 \centering
 \begin{tabular}{lclcl}
- & \multicolumn{4}{c}{\textbf{Secondary Structures Q8}} \\
+ & \multicolumn{4}{c}{\textbf{Q8 Secondary Structures}} \\
  & \multicolumn{2}{c|}{\textit{Validation}} & \multicolumn{2}{c}{\textit{Test}} \\ \cline{2-5} 
  & \multicolumn{1}{l}{Epoch} & \multicolumn{1}{l|}{Accuracy} & \multicolumn{1}{l}{Epoch} & Accuracy \\
 Single-task & 17 & \multicolumn{1}{l|}{71.410\%} & 19 & 71.239\% \\
@@ -243,7 +239,9 @@ Multi-task & 12 & \multicolumn{1}{l|}{71.558\%} & 11 & 71.566\%
   \caption{Peak performance on the absolute solvent accessibility.}
 \end{figure}
 
-\newpage
+\noindent Again the effects of overfitting to the training data set is seen, however not to the same extent as was the case for the solvency features. 
+
+%\newpage
 \begin{multicols}{2}
 
 
