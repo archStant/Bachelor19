@@ -6,7 +6,7 @@ Once we had found what configurations performed the best on the respective param
 
 \subsection{Hyperparameters}
 \subsubsection{No. of layers}
-Variying the number of layers in the model greatly affects the size of the model and thus also the time taken to train it. Further, adding more layers increases the risk of overfitting (factcheck lige det...).\\
+Variying the number of layers in the model greatly affects the size of the model and thus also the time taken to train it. Further, adding more layers increases the models capacity. The higher capacity the more complex task can be solved. Too hgih capacity on the other hand, and the risk of overfitting rises.\citep[p. 110]{goodfellow-et-al-2016}\\
 In our tests we evaluated from two to five hidden layers. Note, that the output layer is not counted in this number.
 
 % Please add the following required packages to your document preamble:
@@ -61,7 +61,7 @@ Below are the results of our tests of learning rate.
 For the remainder of the tests we used a learning rate of 0.0005.
 
 \subsubsection{Depth of layers}
-As with the number of layers, the depth affects both model potential complex predictive performance and model weight and size. We started from the depth of 100 as also used by Xi et al. and found that no increase in performance was acheived by adding more depth, however some gains were made by shallowing down the layers a bit.
+As with the number of layers, the depth affects both model potential complex predictive performance and model weight and size. Again it holds true that too high capacity for complex predictive performance and the possibility of overfitting increases as well. We started from the depth of 100 as also used by \citeauthor{wang-et-al-2016} and found that no increase in performance was achieved by adding more depth, however some gains were made by shallowing down the layers a bit.
 
 \begin{table}[H]
 \centering
