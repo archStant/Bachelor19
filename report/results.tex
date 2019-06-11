@@ -28,7 +28,7 @@ In our tests we evaluated from two to five hidden layers. Note, that the output 
 \multicolumn{1}{l|}{64} & 65.10\% & 80.97\% & \multicolumn{1}{c|}{79.25\%} & 65.100\% & 80.644\% & 78.899\%
 \end{tabular}
 \end{table}
-\noindent We made the dicision after this test to continue with 3 hidden layers, as we did not feel that the gained accuracy by advancing to 4 matched the increased cost of training the network.
+\noindent We made the decision after this test to continue with 3 hidden layers. Since our gain was a difference of 0.03\% we did not feel that the gained accuracy by advancing to 4 layers was high enough to be considered a significant enough increase. Not when held up against the increased cost of training the network.
 
 
 \subsubsection{Learning rate}
@@ -58,10 +58,10 @@ Below are the results of our tests of learning rate.
   \includegraphics[width=\linewidth]{../graphs/new/learning_rate}
   \caption{Accuracy on the validation with varying learning rate. The green lines represent epochs.}
 \end{figure}
-For the remainder of the tests we used a learning rate of 0.0005.
+For the remainder of the tests we used a learning rate of 0.0005, as it was both between the faster at reaching a good accuracy as well as the overall best performing on our validation set.
 
 \subsubsection{Depth of layers}
-As with the number of layers, the depth affects both model potential complex predictive performance and model weight and size. Again it holds true that too high capacity for complex predictive performance and the possibility of overfitting increases as well. We started from the depth of 100 as also used by \citeauthor{wang-et-al-2016} and found that no increase in performance was achieved by adding more depth, however some gains were made by shallowing down the layers a bit.
+As with the number of layers, the depth affects both model potential complex predictive performance and model weight and size. Again it holds true that too high capacity for complex predictive performance leads to the possibility of increases in overfitting as well. We started from the depth of 100 as also used by \citeauthor{wang-et-al-2016} and found that no increase in performance was achieved by adding more depth, however some gains were made by shallowing down the layers a bit.
 
 \begin{table}[H]
 \centering
@@ -78,15 +78,15 @@ As with the number of layers, the depth affects both model potential complex pre
 \multicolumn{1}{l|}{100} & 70.95\% & 82.05\% & \multicolumn{1}{c|}{80.31\%} & 71.007\% & 82.704\% & 80.602\%
 \end{tabular}
 \end{table}
-\noindent As is seen in the table a depth of 90 filters proved most accurate on our tests. Below is shown a graph of three of the values, illustrating how a depth of 90 performed better than the two other continuously throughout training. Refer to the appendix for at graph containing all the tested  depths.
+\noindent As is seen in the table a depth of 90 filters proved most accurate on our tests. Below is shown a graph of only three of the values to facilitate seeing the different curves. It is illustrating how a depth of 90 performed better than the two other continuously throughout training. Refer to the appendix for at graph containing all the tested  depths.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{../graphs/new/layer_width_1}
   \caption{Accuracy on the validation set with varying layer depth.}
 \end{figure}
 \subsubsection{Kernel size}
-In the article by Xi et al, a kernel size of 11 was chosen on the basis that the average length of an $\alpha$-helix chain, and in accordance with this we tested values in the vicinity. For the sake of padding we stuck to uneven values.\\
-While the first tests fokus on keeping the same size of kernel throughout the layers in the model, we also performed a series of tests using increasing, decreasing, pyramid-shaped and valley-shaped progressions of kernel sizes.
+In the article by \citeauthor{wang-et-al-2016}, a kernel size of 11 was chosen on the basis that the average length of an $\alpha$-helix chain, and in accordance with this we tested values in the vicinity\citep[p. 3]{wang-et-al-2016}. For the sake of padding we stuck to uneven values.\\
+While the first tests focus on keeping the same size of kernel throughout the layers in the model, we also performed a series of tests using increasing, decreasing, pyramid-shaped and valley-shaped progressions of kernel sizes.
 
 % Please add the following required packages to your document preamble:
 % \usepackage[normalem]{ulem}
@@ -123,7 +123,7 @@ While the first tests fokus on keeping the same size of kernel throughout the la
 \end{figure}
 
 \noindent As with the layer depth, not all values are shown in the graph - refer to the appendix for a graph with all values.\\
-It became clear that using a progressively rising size of kernels a significant increase was seen in accuracy. For the final model we opted to use kernel sizes [5, 7, 9, 11].\\
+It became clear that having optimized most of our hyperparamters, further improving accuracy for Q8 predictions became increasingly difficult, and the improvements smaller for every hyperparamter optimized. Here doing the last optimization of hyperparamters, using a progressively rising size of kernels gave us the most significant increase in accuracy of Q8 prediction, only comparable to a steady kernel size of 7 or 9. For the final model we therefore opted to use kernel sizes [5, 7, 9, 11].\\
 What is interesting about the data shown above, is that while one would expect larger kernel sizes to increase performance, or at the very least not decrease it (since the model should learn just to 'ignore' extra space in the kernel), the model's performance did indeed decrease as the kernel sizes grew.
 
 
