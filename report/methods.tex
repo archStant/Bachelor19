@@ -295,9 +295,9 @@ Having done so, the same method of constructing a matrix of correct and false pr
 
 \subsection{Hyperparameters}
 In order to optimize our two models we iterated over a series of settings that helps control the learning algorithms behaviour for the model. Those are the models' hyperparameters.
-The Hyperparameters of a model a not changed or learned by the model itself, but rather changed manually by us. As mentioned earlier, this is one of the purposes of a validation set. 
-When finished training a model, we evaluate it with the validation set, and then changes it hyperparamters to improve accuracy or counter overfitting. Not until satisfied with the parameters, and after training the final model, does one use the test set. \citep{goodfellow-et-al-2016} In our Convolutional Neural Network, the hyperparameters are, the number of layers, the depth of the layers, the learning rate and the size of the kernels used in the convolutions, as well as to a certain extend the batch size. The reason we have this reservation, is we could not freely change the batch size due to hardware limitations.\\
-For a starting point, we chose to adapt the values used by Xi et. al, and then iterated to both sides of those values.\\
+The hyperparameters of a model are not changed or learned by the model itself, but rather changed manually by us. As mentioned earlier, this is one of the purposes of a validation set. 
+When finishing a training session on a model, we evaluate it against the validation set, and then change its hyperparameters to improve accuracy or counter overfitting. Not until satisfied with the parameters, and after training the final model, does one use the test set. \citep{goodfellow-et-al-2016} In our Convolutional Neural Network, the hyperparameters are: the number of layers, the depth of the layers, the learning rate and the size of the kernels used in the convolutions, as well as to a certain extend the batch size. The reason we have this reservation, is we could not freely change the batch size due to hardware limitations.\\
+For a starting point, we chose to adapt the values used by \citeauthor{wang-et-al-2016}, and then iterated to both sides of those values.\\
 An initial decision to make was the batch size - that is how many inputs from the data set to process at once. In general there are three approaches how many data points to train on at once, compared to the total length of the data (LOD):
 \begin{center}
 \begin{tabular}{l|c}
@@ -312,9 +312,12 @@ Generative Stochastic & 1 \\
 \hline 
 \end{tabular} 
 \end{center}
-In the case of Generative Stochastic networks, the model is continuously trained on random single data points, and is generally accepted to produce better predictions than both batch and mini-batch gradient descents, however at the cost of increased training time.
-Batch gradient was not an option for us, for the simple practical reason that there was not enough memory on our GPU to handle the entire data set at once. We opted for a batch size of 4 throughout our tests in a compromise between predictive power and speed of training.
-A test of accuracy over different batch sizes can be found in the appendix.
+In the case of Generative Stochastic networks, the model is continuously trained on random single data points, and is generally accepted to produce better predictions than both batch and mini-batch gradient descents, however at the cost of increased training time.\\
+Batch gradient was not an option for us, for the simple practical reason that there was not enough memory on our GPU to handle the entire data set at once. We opted for a batch size of 4 throughout our tests in a compromise between predictive power and speed of training.\\
+A test of accuracy over different batch sizes can be found in the appendix.\\
+\\
+When deciding on which hyperparameters to optimize and which not to, we decided to do tests and optimize the initial learning rate supplied to the Adam optimization algorithm, but not to try different values of the other three hyperparameters this algorithm takes. These are the $\beta_1, \beta_2$ and $\epsilon$ parameters, the first two of which control how quickly the learning rate falls as a product of the mean and variance of recent gradients, and the latter being a very small security measure to avoid divisions by zero. This decision was made on the grounds that in the original paper presenting the Adam algorithm, authors \citeauthor{Adam} declare that "Good default settings for the tested machine learning problems are: [...] $\beta_1 = 0.9$, $\beta_2 = 0.999$ and $\epsilon = 10^{-8}$" \citep[p. 2]{Adam}.\\
+As these values are also the default values when instantiating an Adam optimizer opject in PyTorch, they have not been specified in the code.
 
 
 

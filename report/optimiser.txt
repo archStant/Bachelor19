@@ -1,0 +1,13 @@
+Several choices exist for the choice of optimization algorithm. One simple algorithm would be Stochastic gradient descent, in which there is one learning rate that applies to all model parameters (weights) and does not change throughout training.\\
+Other optimizations such as Adabtive Gradient Algorithm (AdaGrad) maintains a learning rate for each parameter in the model, while algorithms such as the Root Mean Square Propagation (RMSProp) algorithm continuously adjusts the learning rate in accordance to the average magnitude in recent gradients.\\
+In this project we have opted to use the Adam optimizer, introduced by \citeauthor{Adam} no more than four years ago. This optimizer combines two of the above aspects, namely individual learning rates for each parameter and continous evaluation of the learning rates. However while RMSProp only evaluates the learning rate in response to the mean magnitude of gradients, Adam also evaluates on the variance of recent gradients.\\
+To do this, \citeauthor{Adam} writes that the Adam optimizer has four configuration parameters: 
+\begin{itemize}
+\item $\alpha$: The initial learning rate,
+\item $\beta_1$: The exponential decay rate for the mean of gradients
+\item $\beta_2$: The exponential decay rate for the variance of gradients
+\item $\epsilon$: A very small value useful to prevent division by zero
+\end{itemize}
+In the section 'Which optimizer to use?' of his 2016 article "An overview of gradient descent optimization algorithms" author \citeauthor{Ruder16}{10} writes:
+
+"Insofar, RMSprop, Adadelta, and Adam are very similar algorithms that do well in similar circumstances. [...] its bias-correction helps Adam slightly outperform RMSprop towards the end of optimization as gradients become sparser. Insofar, Adam might be the best overall choice."
