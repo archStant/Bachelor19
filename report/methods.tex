@@ -46,7 +46,26 @@ The point in further splitting into both a validation and a test set is that we 
 
 In this case, we followed the advice from the documentation accompanying the dataset and split the data into 5430 proteins for training, 255 proteins for testing and 236 proteins for validation. The training set was then further shuffled between each epoch.
 
-In evaluating the optimal hyperparameters for hte model we iterated over different batch-sizes for training (results below).
+In evaluating the optimal hyperparameters for the model we iterated over different batch-sizes for training (results below).
+
+\subsubsection{One-dimensional convolving}
+When talking about convolutional neural networks, 2D-convolutions are usually what is meant, since the method is commonly used for image processing of one sort or another. In the case of image processing, a normal RGB image can be said to be comprised of three two-dimensional arrays of values, each representing one of the red, green or blue color channels.
+\begin{Figure}
+ \centering
+ \includegraphics[width=\linewidth]{../graphs/tree/full}
+ \captionsetup{width=0.8\linewidth, font=small}
+ \captionof{figure}{An image of a tree, split into the three color channels.}
+\end{Figure}
+\noindent When convolving over such a picture using 2D-convolution, one can apply a series of two-dimensional filters, i.e. filters of a certain height and width.\\
+This is however not the case with the CullPDB data. Our dataset is essentially one-dimensional, with a breadth of 700 amino acids, but instead of 3 color channels, it contains 57 features ("channels").
+\begin{Figure}
+ \centering
+ \includegraphics[width=\linewidth]{../graphs/tree/amino}
+ \captionsetup{width=0.8\linewidth, font=small}
+ \captionof{figure}{The input part of the dataset used in our models.}
+\end{Figure}
+\noindent Of these 57 features, we will be using the first 22 (amino acid residues) as well as the final 22 (the amino acid sequence profile) as input data, while in the end supplying an output of still 700 amino acids, but with 9 or 2 (secondary structures / solvent accessibility) channels for the single-task models and 11 (both) channels in the multi-task model.
+
 
 \subsection{Tools}
 \subsubsection{Model}
@@ -129,8 +148,7 @@ The strength in using PyTorch stems from several aspects:
 \paragraph{GPU support}
 PyTorch provides a strong framework for performing calculations on a graphical processing unit rather than the computer's CPU. While GPUs are valued in video game circles, they are also enourmously useful for performing machine learning, since this is often tasks that involve a high number of calculations that can perfectly fine be performed in parallel. For this, a GPU is preferred over a CPU since they often have a much higher number of cores, and are thus better suited for parallel programming. Indeed in our case, there was a factor of 20 difference in the time needed to train an epoch between doing it on the CPU versus the GPU.
 \paragraph{Tensors}
-The main data structure used in the PyTorch framework is tensors. Where a vector is a 1-dimensional array and a matrix a 2-dimensional array, a tensor is a multi-dimensional array. This means they can be 1-, 2-, 3- or even 42-dimensional arrays. As such tensors subsume scalars, vectors and matrices. (KILDE ER DEEPLEARNING BOGEN p 211). Tensors in PyTorch are multi-dimensional arrays much like the ones implemented in numpy, but with the option to place it on the GPU rather than the CPU.
-
+The main data structure used in the PyTorch framework is tensors. In this context, a tensor is to mean a multi-dimensional array much like the ones implemented in numpy, but with the option to place it on the GPU rather than the CPU.
 \paragraph{Automatic differentiation}
 In order to utilize the backpropagation that lets neural networks train and improve, the loss must be differentiated in regards to all of the weights and values in the model in order to calculate the gradients. This can be a cumbersome task when performed by hand, but PyTorch provides a powerful tool in for of the \texttt{autograd} and \texttt{optim} modules. The first of these modules keeps track of which computations were performed on which variables in order to arrive at the final value of a variable, so that it can be retraced backwards in the end to calculate gradients, while the latter automatically adjusts the weights and values in the model, according to the calculated gradient and a supplied learning rate.
 
