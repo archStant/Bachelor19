@@ -69,8 +69,7 @@ Another feature of a protein we are looking into, is each amino acids solvency. 
 The common perception is that humans and animals process information, i.e. transform perceptional 
 stimuli and physiological conditions into behaviour, by using their brains. This is imprecise 
 however, as the brain as such is only one functioning part of what is called the \textit{nervous 
-system}, which is in turn responsible for the internal workings of human and animal behaviour.
-
+system}, which is in turn responsible for the internal workings of human and animal behaviour.\\
 This nervous system is an abstaction over a number of \textit{neurons} interconnected by 
 synapses. Neurons in turn are so-called electrically exitable cells. In a gross over-simplification, this can be translated into the case that each neuron can have different internal states, depending on the internal states of the neurons it is connected to, thus forming a \textit{neural network}.
 
@@ -87,11 +86,10 @@ synapses. Neurons in turn are so-called electrically exitable cells. In a gross 
  \captionof{figure}{Neurons in the dentate gyrus of an epilepsy patient.}
 \end{Figure}
 
-While obviously interesting within the fields of biology or psychology, this structure has shown 
+\noindent While obviously interesting within the fields of biology or psychology, this structure has shown 
 to be enourmously interesting in the field of computation, as one can in fact model this very 
 thing and use it to make predictions based on prior observations, for example in regards to the 
-aforementioned structures of proteins folding.
-
+aforementioned structures of proteins folding.\\
 Analogously, or rather, digitally, we can use this model to construct an \textit{artificial 
 neural network}.
 These set themselves apart from biological neural networks in a couple of ways: most urgently in that while neurons in biological neural networks are connected to each other via synapses, so that each neuron has an either inhibitory or activating effect on whether or not a connected neuron 'fires', in artificial neural networks neurons are connected by \textit{edges}, each with an associated \textit{weight}, allowing the artificial networks to leave the discrete domain and enter the continuous.
@@ -101,7 +99,41 @@ An artificial neural network is a specific instantiation of a \textit{multi-laye
 A multi-layer perceptron in turn is a system of nodes arranged into layers and each receiving their value from the value of the nodes in the layer before them (adjusted by some weight) in combination with a bias (a scalar) and an activation function of some sort. \\
 In this way the first layer will be called the \textit{input layer}, the last layer the \textit{output layer} and all layers in between \textit{hidden layers}. \\
 In the case of neural networks, the nodes in the system are referred to as neurons.
-Thus, if one was to describe it more precisely, the value $z_i$ of neuron layer \textit{i} with \textit{d} number of neurons in it, given the matrix of sets of weights \textit{w} (the biases being the very first row) and the activation function $h()$ can be expressed as follows:
+
+\begin{Figure}
+ \centering
+ \begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=0.4cm,y=0.4cm]
+\clip(0,0) rectangle (15,15);
+\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,7) circle (0.4cm);
+\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,10) circle (0.4cm);
+\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,4) circle (0.4cm);
+\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,7) circle (0.4cm);
+\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,10) circle (0.4cm);
+\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,13) circle (0.4cm);
+\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,10) circle (0.4cm);
+\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,7) circle (0.4cm);
+\draw [line width=1pt] (3,10)-- (6,13);
+\draw [line width=1pt] (3,10)-- (6,10);
+\draw [line width=1pt] (3,10)-- (6,7);
+\draw [line width=1pt] (3,10)-- (6,4);
+\draw [line width=1pt] (3,7)-- (6,13);
+\draw [line width=1pt] (3,7)-- (6,10);
+\draw [line width=1pt] (3,7)-- (6,7);
+\draw [line width=1pt] (3,7)-- (6,4);
+\draw [line width=1pt] (8,13)-- (11,10);
+\draw [line width=1pt] (8,10)-- (11,10);
+\draw [line width=1pt] (8,7)-- (11,10);
+\draw [line width=1pt] (8,4)-- (11,10);
+\draw [line width=1pt] (8,4)-- (11,7);
+\draw [line width=1pt] (11,7)-- (8,7);
+\draw [line width=1pt] (8,10)-- (11,7);
+\draw [line width=1pt] (11,7)-- (8,13);
+\end{tikzpicture}
+ \captionsetup{width=0.8\linewidth, font=small}
+ \captionof{figure}{An extremely simple neural network.}
+\end{Figure}
+\noindent The neural network shown consists of two input neurons (red), one hidden layer of three neurons (green) and two output neurons(blue). The black edged between the neurons represent the weights and biases of the system.\\
+Thus, if one was to describe it more accurately, the value $z_i$ of neuron layer \textit{i} with \textit{d} number of neurons in it, given the matrix of sets of weights \textit{w} (the biases being the very first row) and the activation function $h()$ can be expressed as follows:
 \[
 z_i = h\left(\sum_{j=0}^d w_{ij}\cdot z_{i-1} + w_{i0}\right)
 \]
@@ -119,7 +151,7 @@ Such a model is useful for calculating continuous values as well as for classifi
  \captionof{figure}{Handwritten digits in the MNIST data set.}
 \end{Figure}
 
-A common implementation of a neural network to perform this task is to have a single hidden layer of 800 nodes, however the most successful implementations in regards to the MNIST data set have been made with \textit{convolutional neural networks}, but we shall return to these later.
+\noindent A common implementation of a neural network to perform this task is to have a single hidden layer of 800 nodes, however the most successful implementations in regards to the MNIST data set have been made with \textit{convolutional neural networks}, but we shall return to these later.
 
 \subsubsection{Training}
 Simply having defined the system of the neural network as above (denoted $f_{NN}$) naturally does not give us a reliable method for classifying, as the accuracy of the prediction inherently depends on the correctness of the weights and biases of the system (denoted $\Theta$), which must be initialized with random values. \\
@@ -127,33 +159,7 @@ Enter a rather nifty idea named \textit{backpropagation}. Having a set of predic
 Now backpropagation refers to the practice of essentially taking the derivative of the loss function in regards to the matrix of weights and biases, thereby calculating a \textit{gradient} $\nabla{l(f_{NN}(\Theta, x), \hat{y})}$ of these values with respect to the accuracy of the system, and then adjusting the weights and biases by the gradient multiplied by a learning rate scalar.\\
 In laymans terms, by doing this one gets a matrix of 'change your weights by this and that much in this and that direction to increase prediction accuracy'.
 %
-%\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=0.4cm,y=0.4cm]
-%\clip(-3.84,0.01) rectangle (18.8,18.55);
-%\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,7) circle (0.4cm);
-%\draw [line width=1pt,fill=ffqqqq,fill opacity=1] (2,10) circle (0.4cm);
-%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,4) circle (0.4cm);
-%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,7) circle (0.4cm);
-%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,10) circle (0.4cm);
-%\draw [line width=1pt,fill=qqffqq,fill opacity=1] (7,13) circle (0.4cm);
-%\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,10) circle (0.4cm);
-%\draw [line width=1pt,fill=qqttcc,fill opacity=1] (12,7) circle (0.4cm);
-%\draw [line width=1pt] (3,10)-- (6,13);
-%\draw [line width=1pt] (3,10)-- (6,10);
-%\draw [line width=1pt] (3,10)-- (6,7);
-%\draw [line width=1pt] (3,10)-- (6,4);
-%\draw [line width=1pt] (3,7)-- (6,13);
-%\draw [line width=1pt] (3,7)-- (6,10);
-%\draw [line width=1pt] (3,7)-- (6,7);
-%\draw [line width=1pt] (3,7)-- (6,4);
-%\draw [line width=1pt] (8,13)-- (11,10);
-%\draw [line width=1pt] (8,10)-- (11,10);
-%\draw [line width=1pt] (8,7)-- (11,10);
-%\draw [line width=1pt] (8,4)-- (11,10);
-%\draw [line width=1pt] (8,4)-- (11,7);
-%\draw [line width=1pt] (11,7)-- (8,7);
-%\draw [line width=1pt] (8,10)-- (11,7);
-%\draw [line width=1pt] (11,7)-- (8,13);
-%\end{tikzpicture}
+
 
 \subsubsection{Convolutional neural networks}
 Before talking about convolutional neural networks, we have to specify what a convolution is. Again the MNIST data set serves as an obvious example.\\
