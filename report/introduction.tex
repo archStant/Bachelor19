@@ -1,16 +1,16 @@
 \section{Introduction}
-Before presenting the motivation for this thesis and the concepts used throughout it, we would like to elaborate on the purpose of the thesis. In our thesis contract we have the following description of the purpose of the thesis in Danish:\\\\
-The purpose with the thesis is to learn how neural networks is based theoretically, to learn how they can be applied to solve specific tasks, in this case to predict protein properties based on their composition of amino acids, as well as a basic understanding of these. \\\\
+Before presenting the motivation for this paper and the concepts used throughout it, we would like to elaborate on the purpose of the thesis. In our thesis contract we have the following description of the purpose of the paper in Danish:\\\\
+The purpose of this project is to learn how neural networks are based theoretically, to learn how they can be applied to solve specific tasks, in this case to predict protein properties based on their composition of amino acids, as well as achieving a basic understanding of these features. \\\\
 We expect the process to have the following parts:\\
 - Implementing a rudimentary neural network without use of newer tools, with the motivation to be able to explain the theoretical background for it.\\
 - A real implementation of a artificial neural network based on established frameworks, as PyTorch, with the motivation to be able to predict protein secondary structures, based on a sequence of amino acids. \\
 - A similar implementation with the motivation of being able to predict Solvent Accessible Surface Area based on amino acid sequences. \\
-- A comparison of result from the two above mentioned models, contrasted with a model that use multi-tasking to predict both of those properties.\\ 
+- A comparison of result from the two above mentioned models, contrasted with a model that uses multi-task learning to predict both of those properties.\\ 
 
-Using this description as a guide through our work, we started with a look at the rudementary implentation of a neural network. As a starting point for this, we were given a jupyter-notebook with some introductory explanations and excercises to do.
-It can be found at \href{https://github.com/dennybritz/nn-from-scratch/blob/master/nn-from-scratch.ipynb}{Github}.
-Besides doing the excercises and playing with the code to get a better understanding of the methods and concepts, we afterwords implemented the same neural network using pytorch. 
-This gave us a basis understanding of where to start coding our real neural networks. As it was used as a practice excersise for us to get started and giving a base understanding, we have decided not to include the code or excersises in the thesis, as it wouldn't add anyting relevant, though the understanding gained is part of our explaination in the method section of the thesis. Before going there though, we would like to finish introducing the background for this thesis.
+Using this description as a guide through our work, we started with a look at the rudementary implentation of a neural network. As a starting point for this, we were given a Jupyter-notebook with some introductory explanations and excercises to do.
+It can be found at \href{https://github.com/dennybritz/nn-from-scratch/blob/master/nn-from-scratch.ipynb}{the author's Github page}.
+After completing the excercises and tweaking the code to get a better understanding of the methods and concepts, we afterwords implemented the same neural network using PyTorch. 
+This gave us a basic understanding of where to start coding our real neural networks. As it was used as a practice excersise for us to get started and giving a base understanding, we have not included the code or excersises in the thesis, although the understanding gained is part of our explaination in the method section of the paper. Before going there though, we would like to finish introducing the background for this thesis.
 
 \subsection{Motivation}
 In computer science today, one of the areas that are the most in the public eye and covered by media and politicians alike is the area of Artificial Intelligence. Within this area concepts like deep learning, machine learning and neural networks are showing up repeatedly as buzzwords and central areas for future research and use.\\
@@ -18,14 +18,15 @@ It is in this context the motivation to have neural networks as a topic for this
 Secondly the purpose is to widen this understanding of neural networks by implementing one to handle a specific task. This task is to predict secondary structure of proteins based on their amino acid composition. Lastly the purpose is to give an rudimentary understanding of of those proteins to give context to the use of the neural network.\\
 The motivation for choosing protein secondary structure prediction for the neural networks also has several reasons. 
 The textbook example when learning about neural networks and implementing them is to identify a handwritten number between 0 and 9. This neural network is often trained on the MNIST dataset of handwritten numbers. \\
-Since many people has done this, and the application and importance of this in the real world is limited there would be very little content to this thesis if that had been the context. We will come back to the MNIST dataset of numbers though, to explain some of the basics of neural networks. Protein secondary structure prediction on the other hand has more real world applications and are an important branch of bioinformatics, and is used in both medicine and biotechnology. Since it is an important topic with real world use, it is an area that is still under research to improve the prediction accuracy. As such it gives a current and relevant context for this thesis as an interesting introduction to neural networks and their application.   
+Since many people has done this, and the application and importance of this in the real world is limited there would be very little content to this thesis if that had been the context. We will return to the MNIST dataset of numbers though, to explain some of the basics of neural networks. Protein secondary structure prediction, on the other hand, has more real world applications and is an important branch of bioinformatics today, as it is used in both medicine, biotechnology and research into diseases such as Alzheimer's. \\
+Since it is an important topic with real world use, it is an area that is still under research to improve the prediction accuracy. As such it gives a current and relevant context for this thesis as an interesting introduction to neural networks and their application.   
 
 
 \subsection{Proteins}
-Proteins are large bio molecules that has a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. KILDEKILDEKILDE!!. They consist of a chain of amino acids, where it is the sequence of the amino acids that determine the protein. The linear sequence of amino acids in a protein is also known as a proteins primary structure. 
+Proteins are large bio-molecules that serve a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. KILDEKILDEKILDE!!. They consist of a chain of amino acids, where it is the sequence of the amino acids that determine the protein. The linear sequence of amino acids in a protein is also known as a protein's primary structure. 
 
 \subsubsection{Secondary Structures}
-The secondary structures are the three dimensional forms a protein can take in a local segment and are largely determined by it's primary structure. Among the many reasons for predicting the secondary structure, using it as a stepping stone for trying to find the three-dimensional structure of a protein, which is normally difficult to assess. The secondary structure itself is the three-dimensional form of local segments of the protein \citep[p.~2]{qi-et-al-2012}.
+The secondary structures are the three dimensional forms a protein can take in a local segment and are largely determined by its primary structure. Among the many reasons for predicting the secondary structure, using it as a stepping stone for trying to find the three-dimensional tertiary structure of a protein (which is normally difficult to assess) is one of such. The secondary structure itself is the three-dimensional form of local segments of the protein \citep[p.~2]{qi-et-al-2012}.
 The secondary structure is divided into groups of either 3 or 8 types of structure, named Q3 and Q8 \citep{zhou-and-troyanskaya-2014}. 
 Using the DSSP alphabet \citep{kabsch-and-sander-1983} 
 for giving the groups letters, the categories of Q8 are as shown in the Q8 table \citep{qi-et-al-2012}.
@@ -45,8 +46,8 @@ S	& bend								\\
 L	& loop								\\
 \end{tabular}
 \end{table}
-According to the two articles used as a starting point for this thesis, which will be further showed later, the accuracy for current state of the art when predicting Q8 secondary structure is around 72-74\% \citep{zhou-and-troyanskaya-2014, qi-et-al-2012}. 
-When predicting Q3 secondary structures current state of the art has it's accuracy percentage in the mid eighties. This was for a long time the secondary structure prediction that was done, but due to advances in technology and research, the harder but more detailed Q8 predictions are gaining more attention. 
+\noindent According to the two articles used as a starting point for this paper, which will be further elaborated upon later, the accuracy for current state of the art when predicting Q8 secondary structure is around 72-76\% \citep{zhou-and-troyanskaya-2014, qi-et-al-2012, wang-et-al-2016}. \\
+When predicting Q3 secondary structures the accuracy percentage of the current state of the art lies in the mid eighties. This was for a long time the main focus of research in secondary structure prediction, but due to advances in technology and research, the harder but more detailed Q8 predictions are gaining more attention. 
 Again using the DSSP alphabet for giving letters, the groups of Q3 are as in the Q3 table \citep{qi-et-al-2012}.
 \begin{table}[H]
 \caption{Q3 structure overview}
