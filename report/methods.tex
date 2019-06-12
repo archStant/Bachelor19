@@ -2,12 +2,12 @@
 
 \subsection{Data}
 %\subsubsection{Source}
-The \texttt{PISCES Cull PDB} database server (Wang \& Dunbrack, 2003) is a commonly used source for data for evaluating 
+The \texttt{PISCES Cull PDB} database server \citep{wang-2003} is a commonly used source for data for evaluating 
 machine learning models trained to predict amino secondary structures. Following in the footsteps of the Zhou \& 
 Troyanskaya, we have used the same data set as in their 2014 paper \textit{Deep Supervised and Convolutional Generative 
 Stochastic Network}, which is a dataset produced by the PISCES server.
 
-The database contains information on 5926 proteins. Zhou \& Troyanskaya have filtered the data such that it contains no proteins consisting of less than 50 or more than 700 amino acids, and have thus encoded each protein as a section of 700 amino acids, the non-existant ones (in the case of a protein of less than 700 amino acids) being marked as \texttt{not sequenced}.
+The database contains information on 5926 proteins. \citeauthor{zhou-and-troyanskaya-2014} have filtered the data such that it contains no proteins consisting of less than 50 or more than 700 amino acids, and have thus encoded each protein as a section of 700 amino acids, the non-existant ones (in the case of a protein of less than 700 amino acids) being marked as \texttt{Not Sequenced}.
 
 \subsubsection{Features}
 Each amino acid in the database contains 57 features (or channels) of information. The first 22 features encode which of the 20 amino acids that occur in genetic code, plus amino acid 'X' representing 'Unknown' as well as 'NoSeq'.\\
@@ -32,7 +32,7 @@ Feature nr.   & Feature                                     & Encoding          
 \begin{multicols}{2}
 \noindent The N- and C-terminals indicate whether the amino acid in question is the first or the last in the protein chain and are encoded binarily.
 
-While the solvent accessibility features in the PISCES database are encoded as floating point numbers, the creators of the dataset in question have followed the practice of (Qi et. al., 2012) and discretizised the values to binary values. The threshold for absolute accessibility is 15, while relative accessibility is "is normalized by the largest accessibility value in a protein and thresholded at 0.15" (Zhou \& Troyanksaya, 2014).
+While the solvent accessibility features in the PISCES database are encoded as floating point numbers, the creators of the dataset in question have followed the practice of \citeauthor{qi-et-al-2012} and discretizised the values to binary values. The threshold for absolute accessibility is 15, while relative accessibility is "is normalized by the largest accessibility value in a protein and thresholded at 0.15" \citep{zhou-and-troyanskaya-2014}.
 
 The sequence profile in the final 22 features is calculated using the \textit{Position-Specific Scoring Matrix} (PSSM) system, and is used to indicate that if it had not been the amino acid in question that was present at this specific position, with what probability would it then statistically have been which of the other amino acids. Interestingly, the order of the amino acids in the sequence profile differs from that of the amino acid residues, however this should not have any impact on the model.
 
