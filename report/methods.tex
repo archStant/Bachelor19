@@ -79,7 +79,6 @@ ReLU(x) = x^+ = max(0,x)
 Among the reason for this ease is that the derivatives in a ReLU remains large as well as consistent when the unit is active. 
 As \citeauthor{goodfellow-et-al-2016} states: "Because rectified linear units are nearly linear, they preserve many of the properties that make linear models easy to optimize with gradient-
 based methods. They also preserve many of the properties that make linear models generalize well."\citep[p. 170]{goodfellow-et-al-2016} Furthermore, they state that ReLU is the recommended activation function for most feedforward neural networks\citep[p. 170]{goodfellow-et-al-2016}.
-
 \paragraph{Sigmoid function}
 Sigmoid functions are a specific variant of logistic functions, and serve to map values in arbitrary ranges to values within a specific range, so that the mapped values over the original values form a sigmoid curve. The value of applying sigmoid functions to outputs from a neural network is that they then enable the model to map its output of arbitrarily big or small values to a probability (i.e. a value $0\leq x \leq 1$). In the present case, this becomes relevant when predicting relative and absolute solvent accessibilities.
 \[
