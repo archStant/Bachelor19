@@ -32,7 +32,7 @@ Y		& Tyrosine		\\
 
 \section*{Secondary structures}
 
-\begin{table}[h]
+\begin{table}[H]
 \caption{Q8 structure overview}
 \centering
 \begin{tabular}{l|l}
@@ -49,7 +49,7 @@ L	& loop								\\
 \end{tabular}
 \end{table}
 
-\begin{table}
+\begin{table}[H]
 \caption{Q3 structure overview}
 \centering
 \begin{tabular}{l|l}
@@ -63,7 +63,7 @@ C (coil)	& I, S, T, L				\\
 
 \section*{Batch sizes}
 A comparison of acheived accuracies on the validation and test set respectively performed on the unoptimized multi-task model can be seen below.
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{lllllll}
 \multicolumn{7}{c}{Layer debth = 80, kernel size = 11, learning rate = 0.00025, 3 hidden layers}                                                                                                                                                                                                                                                                                   \\ \hline
@@ -81,7 +81,7 @@ Batch size & Q8 & \begin{tabular}[c]{@{}l@{}}Relative\\solvent\\accessibility\en
 
 \section*{Layer depth}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{../graphs/new/layer_width_2}
   \caption{Accuracy on the validation set with varying layer depth.}
@@ -89,7 +89,7 @@ Batch size & Q8 & \begin{tabular}[c]{@{}l@{}}Relative\\solvent\\accessibility\en
 
 \section*{Kernel sizes}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{../graphs/new/kernel_size_1}
   \caption{All of the tested values for constant kernel size.}

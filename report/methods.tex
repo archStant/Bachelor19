@@ -3,18 +3,16 @@
 \subsection{Data}
 %\subsubsection{Source}
 The \texttt{PISCES Cull PDB} database server \citep{wang-2003} is a commonly used source for data for evaluating 
-machine learning models trained to predict amino secondary structures. Following in the footsteps of the Zhou \& 
-Troyanskaya, we have used the same data set as in their 2014 paper \textit{Deep Supervised and Convolutional Generative 
-Stochastic Network}, which is a dataset produced by the PISCES server.
-
-The database contains information on 5926 proteins. \citeauthor{zhou-and-troyanskaya-2014} have filtered the data such that it contains no proteins consisting of less than 50 or more than 700 amino acids, and have thus encoded each protein as a section of 700 amino acids, the non-existant ones (in the case of a protein of less than 700 amino acids) being marked as \texttt{Not Sequenced}.
+machine learning models trained to predict protein secondary structures.\\
+In training our model, we have used the data set produced by \cite{zhou-and-troyanskaya-2014}, originally extracted from the PISCES server.\\
+The data contains information on 5926 proteins. \citeauthor{zhou-and-troyanskaya-2014} have filtered the data such that it contains no proteins consisting of less than 50 or more than 700 amino acids, and have thus encoded each protein as a section of 700 amino acids, the non-existant ones (in the case of a protein of less than 700 amino acids) being marked as \texttt{Not Sequenced}.
 
 \subsubsection{Features}
 Each amino acid in the database contains 57 features (or channels) of information. The first 22 features encode which of the 20 amino acids that occur in genetic code, plus amino acid 'X' representing 'Unknown' as well as 'NoSeq'.\\
 \\
-This information is encoded in a one-hot format, meaning that instead of encoding the actual amino acid or the number of the acid, one encodes an array of zeros with only the element at the index of the number of the amino acid being set to one. So in order to encode Glutamic acid (E) i.e. the third amino acid, the one-hotted data would be $[0, 0, 1, 0, 0, ... , 0, 0]$. \\
-Encoding the data in this way makes very good sence in regard to training classifiers, as if one was to encode amino acid E simply as the number 3 (E being the third amino acid), the classifier would falsely train on the premise that a guess of 4 was a less bad guess than a guess of 15, based on the proximity of the indexes.\\
-The secondary structure labels that the model attempts to predict is encoded in the same manner, however for training purposes we have collapsed it into indexes in our model. Further, as explained above, there are three main forms of protein secondary structures (group H = helices, group B = Sheets and group C= Coils) and within them there are further 8 sub-forms of structures, as seen in  the Q8 table, which are the ones that are encoded in the dataset.
+This information is encoded in a one-hot format, meaning that instead of encoding the actual amino acid or the index of the acid, one encodes an array of zeros with only the element at the index of the number of the amino acid being set to one. So in order to encode Glutamic acid (E) i.e. the third amino acid, the one-hotted data would be $[0, 0, 1, 0, 0, ... , 0, 0]$. \\
+Encoding the data in this way makes very good sence in regard to training classifiers, as if one was to encode amino acid E simply as the number 3 (E being the third amino acid), the classifier would falsely train on the premise that a guess of 4 was a less bad guess than a guess of 15, based on the proximity of the indices.\\
+The secondary structure labels that the model attempts to predict are encoded in the same manner, however for training purposes we have collapsed them into indices in our model. Further, as explained above, there are three main forms of protein secondary structures (H, B, and C) and within them there are further 8 sub-forms of structures, as seen in  the Q8 table, which are the ones that are encoded in the dataset.
 
 \end{multicols}
 \begin{table}[h]
@@ -30,21 +28,16 @@ Feature nr.   & Feature                                     & Encoding          
 \end{table}
 \newpage
 \begin{multicols}{2}
-\noindent The N- and C-terminals indicate whether the amino acid in question is the first or the last in the protein chain and are encoded binarily.
-
-While the solvent accessibility features in the PISCES database are encoded as floating point numbers, the creators of the dataset in question have followed the practice of \citeauthor{qi-et-al-2012} and discretizised the values to binary values. The threshold for absolute accessibility is 15, while relative accessibility is "is normalized by the largest accessibility value in a protein and thresholded at 0.15" \citep{zhou-and-troyanskaya-2014}.
-
+\noindent The binarily encoded N- and C-terminals indicate whether the amino acid in question is the first or the last in the protein chain.\\
+While the solvent accessibility features in the PISCES database are encoded as floating point numbers, the creators of the dataset in question have followed the practice of \citeauthor{qi-et-al-2012} and discretizised the values to binary values. The threshold for absolute accessibility is 15, while relative accessibility is "is normalized by the largest accessibility value in a protein and thresholded at 0.15" \citep{zhou-and-troyanskaya-2014}.\\
 The sequence profile in the final 22 features is calculated using the \textit{Position-Specific Scoring Matrix} (PSSM) system, and is used to indicate that if it had not been the amino acid in question that was present at this specific position, with what probability would it then statistically have been which of the other amino acids. Interestingly, the order of the amino acids in the sequence profile differs from that of the amino acid residues, however this should not have any impact on the model.
 
 
 \subsubsection{Splitting the data}
-When training our model, we split the above data into three sets: training, validation and test. The purpose of splitting the training data from the evaluation data is to counter possible overfitting, that is, training a model to an extent where it correctly predicts the kinks and quirks of the training set that do not express general tendencies in the system.
-
-he point in further splitting into both a validation and a test set is that we continuously evaluate the loss and accuracy on the validation set (instead of the training set) in order to make decision regarding the architecture of the model and the configuration of the models hyperparameters. To prevent us from humanly overfitting to this set, the test set is held in reserve and is only evaluated once, in the end of a model's training, to evaluate how well the model does on new, never seen before data. After having split the test set away, the normal way of splitting the remaining data into training and validation set, is a split of 80\% to training, 20\% to validation. \citep[p. 119]{goodfellow-et-al-2016}
-
-In this case though, we followed the advice from the documentation accompanying the dataset and split the data into 5430 proteins for training, 255 proteins for testing and 236 proteins for validation. The training set was then further shuffled between each epoch, to make sure that the batch gradient would be as close as possible to the true gradient, and reduce the risk of batches not being representative of the entire dataset.
-
-In evaluating the optimal hyperparameters for the model we iterated over different batch-sizes for training (results below).
+When training our model, we split the above data into three sets: training, validation and test. The purpose of splitting the training data from the evaluation data is to counter possible overfitting, that is, training a model to an extent where it correctly predicts the kinks and quirks of the training set that do not express general tendencies in the system.\\
+The point in further splitting into both a validation and a test set is that we continuously evaluate the loss and accuracy on the validation set (instead of the training set) in order to make decision regarding the architecture of the model and the configuration of the models hyperparameters. To prevent us from humanly overfitting to this set, the test set is held in reserve and is only evaluated once, in the end of a model's training (a so-called 'holdout dataset'), to evaluate how well the model does on new, never seen before data. After removing the test set the normal way of splitting the remaining data into training and validation set, is a split of 80\% to training, 20\% to validation \citep[p. 119]{goodfellow-et-al-2016}.\\
+In this case though, we followed the advice from the documentation accompanying the dataset and split the data into 5430 proteins for training, 255 proteins for testing and 236 proteins for validation. The training set was then further shuffled between each epoch, to make sure that the batch gradient would be as close as possible to the true gradient, and reduce the risk of batches not being representative of the entire dataset.\\
+In evaluating the optimal hyperparameters for the model we also iterated over different batch-sizes for training (results below).
 
 \subsubsection{One-dimensional convolving}
 When talking about convolutional neural networks, 2D-convolutions are usually what is meant, since the method is commonly used for image processing of one sort or another. In the case of image processing, a normal RGB image can be said to be comprised of three two-dimensional arrays of values, each representing one of the red, green or blue color channels.
@@ -75,12 +68,12 @@ Possibly the simplest of these activation functions is the rectifier, which when
 \[
 ReLU(x) = x^+ = max(0,x)
 \]
-\noindent ReLUs are easily optimized, due to this similarity to linear units. 
-Among the reason for this ease is that the derivatives in a ReLU remains large as well as consistent when the unit is active. 
+\noindent Using ReLUs in artificial neural networks makes for easier optimizations due to the fact that its derivatives remain large as well as consistent when the unit is active\citep[p. 193]{goodfellow-et-al-2016}.\\
 As \citeauthor{goodfellow-et-al-2016} states: "Because rectified linear units are nearly linear, they preserve many of the properties that make linear models easy to optimize with gradient-
 based methods. They also preserve many of the properties that make linear models generalize well."\citep[p. 170]{goodfellow-et-al-2016} Furthermore, they state that ReLU is the recommended activation function for most feedforward neural networks\citep[p. 170]{goodfellow-et-al-2016}.
+
 \paragraph{Sigmoid function}
-Sigmoid functions are a specific variant of logistic functions, and serve to map values in arbitrary ranges to values within a specific range, so that the mapped values over the original values form a sigmoid curve. The value of applying sigmoid functions to outputs from a neural network is that they then enable the model to map its output of arbitrarily big or small values to a probability (i.e. a value $0\leq x \leq 1$). In the present case, this becomes relevant when predicting relative and absolute solvent accessibilities.
+Sigmoid functions are a specific variant of logistic functions that serve to map values in arbitrary ranges to values within a specific range, so that the mapped values over the original values form a sigmoid curve. The value of applying sigmoid functions to outputs from a neural network is that they then enable the model to map its output of arbitrarily big or small values to a probability (i.e. a value $0\leq x \leq 1$). In the present case, this becomes relevant when predicting relative and absolute solvent accessibilities.
 \[
 Sigmoid(x) = \frac{1}{1 + e^{-x}} = \frac{e^x}{e^x +1}
 \]
@@ -139,7 +132,7 @@ Thus, given two probability distributions \textit{m} and \textit{n} predicting t
 $$L ( m , n ) = - \sum _ { z \in \mathcal { Z } } m ( z ) \log n ( z )$$
 A specific instance of the cross entropy loss is the \textit{binary cross entropy loss}, which is useful in cases where the possible outcome is binary (i.e. there are only two possible outcomes). 
 \\
-Seing as the aim of this paper was to train our network to perform classifications first on amino acid secondary structures (of which there are eight) and then relative and absolute solvent accessibility (which are both encoded as either ones or zeros), we have used a Cross Entropy Loss function on the former and a Binary Cross Entropy Loss function on the two latter.
+Seing as the aim of this paper was to train our network to perform classifications first on amino acid secondary structures (of which there are eight) and then relative and absolute solvent accessibility (which are both encoded as either ones or zeros), we have used Cross Entropy Loss on the former and Binary Cross Entropy Loss on the two latter.
 
 
 \paragraph{Optimization algorithm}
@@ -163,30 +156,29 @@ In training our network we utilized a machine learning framework for Python call
 The PyTorch library is build upon the \href{http://torch.ch/}{Torch} library, originally a machine learning library and language based on the scripting language Lua.\\
 The strength in using PyTorch stems from several aspects:
 \paragraph{GPU support}
-PyTorch provides a strong framework for performing calculations on a graphical processing unit rather than the computer's CPU. While GPUs are valued in video game circles, they are also enourmously useful for performing machine learning, since this is often tasks that involve a high number of calculations that can perfectly fine be performed in parallel. For this, a GPU is preferred over a CPU since they often have a much higher number of cores, and are thus better suited for parallel programming. Indeed in our case, there was a factor of 20 difference in the time needed to train an epoch between doing it on the CPU versus the GPU.
+PyTorch provides a strong framework for performing calculations on a graphical processing unit rather than the computer's CPU. While GPUs are valued in video game circles, they are also useful for performing machine learning tasks, since these are often tasks that involve a high number of calculations that can be performed in parallel. For this, a GPU is preferred over a CPU since they often have a much higher number of cores, and are thus better suited for parallel programming. Indeed in our case, there was a factor of 20 difference in the time needed to train an epoch between doing it on the CPU versus the GPU.
 \paragraph{Tensors}
-The main data structure used in the PyTorch framework is tensors. Where a vector is a 1-dimensional array and a matrix a 2-dimensional array, a tensor is a multi-dimensional array. This means they can be 1-, 2-, 3- or even 42-dimensional arrays. As such tensors subsume scalars, vectors and matrices. (KILDE ER DEEPLEARNING BOGEN p 211). Tensors in PyTorch are multi-dimensional arrays much like the ones implemented in numpy, but with the option to place it on the GPU rather than the CPU.
+The main data structure used in the PyTorch framework is tensors. Where a vector is a 1-dimensional array and a matrix a 2-dimensional array, a tensor is a multi-dimensional array. This means they can be 1-, 2-, 3- or even 42-dimensional arrays. As such tensors subsume scalars, vectors and matrices. (KILDE ER DEEPLEARNING BOGEN p 211). Tensors in PyTorch are multi-dimensional arrays much like the ones implemented in numpy, but with the option to place them on the GPU rather than the CPU.
 \paragraph{Automatic differentiation}
-In order to utilize the backpropagation that lets neural networks train and improve, the loss must be differentiated in regards to all of the weights and values in the model in order to calculate the gradients. This can be a cumbersome task when performed by hand, but PyTorch provides a powerful tool in for of the \texttt{autograd} and \texttt{optim} modules. The first of these modules keeps track of which computations were performed on which variables in order to arrive at the final value of a variable, so that it can be retraced backwards in the end to calculate gradients, while the latter contains ready-made implementations of several optimization algorithms (among them Adam), which automatically adjusts the weights and values in the model, according to the calculated gradient and a supplied learning rate.\\
+In order to utilize the backpropagation that lets neural networks train and improve, the loss must be differentiated in regards to all of the weights and values in the model in order to calculate the gradients. This can be a cumbersome task when performed by hand, but PyTorch provides a powerful tool for this in the \texttt{autograd} and \texttt{optim} modules. The first of these modules keeps track of which computations were performed on which variables in order to arrive at the final value of a variable, so that it can be retraced backwards in the end to calculate gradients, while the latter contains ready-made implementations of several optimization algorithms (among them Adam), which automatically adjusts the weights and values in the model according to the calculated gradient and a supplied learning rate.\\
 These things combined allow a training step for a neural network to be performed in as few steps as shown below:
 \begin{lstlisting}
 # Setup
-LR = 0.0025              # learning rate
+LR = 0.0025         # learning rate
 optimizer = torch.optim.Adam(cnn.parameters(), lr=LR)
 loss_func = nn.CrossEntropyLoss()
 
 # One training step
-output = cnn(b_x)
-loss = loss_func(output, b_y)
+output = cnn(x)
+loss = loss_func(output, y)
 optimizer.zero_grad()
 loss.backward()
 optimizer.step()
 \end{lstlisting}
 
 \paragraph{Ready-made implementations}
-A final helpful aspect of using PyTorch for implementing artificial neural networks is the abundance of already implemented algorithms and functions. This adds the further detail to the implementation that several of the most often used functions have been written together for reasons of numerical stability. 
-
-For example, the above mentioned Cross Entropy Loss function, which when implemented in PyTorch also contains an implementation of the \texttt{LogSoftmax()} function. The documentation for PyTorch reveals that the implementation then becomes:
+A final helpful aspect of using PyTorch for implementing artificial neural networks is the abundance of already implemented algorithms and functions. This adds the further detail to the implementation that several of the most often used functions have been written together for reasons of numerical stability. \\
+For example, the aforementioned Cross Entropy Loss function, which when implemented in PyTorch also contains an implementation of the \texttt{LogSoftmax()} function. The documentation for PyTorch reveals that the implementation then becomes:
 
 \begin{align*}
 \operatorname{loss}(x, \text {class})&=-\log \left(\frac{e^{ x[\text {class}]}}{\sum_{j} e^{ x[j]}}\right)\\
@@ -205,7 +197,7 @@ where
 In terms of performing the calculations, all of our training of the model was done on a Dell PC with a 7th gen octocore Intel Core i7 CPU, 16GB of RAM and a Nvidia GeForce GTX 1050TI GPU with 4GB of RAM and 768 cores running Linux.
 
 \subsection{Single-task secondary structure prediction}
-We built a convolutional neural network, implemented in Python using PyTorch in order to predict amino acid secondary structures from the amino acid residues as well as the sequence profile. We tested variations on number of layers, layer depth, kernel sizes and learning rate (results below) in order to maximize performance of the model. 
+We built a convolutional neural network, implemented using PyTorch in order to predict amino acid secondary structures from the amino acid residues as well as the sequence profile. We tested variations on number of layers, layer depth, kernel sizes and learning rate (results below) in order to maximize performance of the model. 
 
 \subsubsection{Architecture}
 
@@ -213,7 +205,7 @@ The basic structure of the model remained unchanged throughout these test. The b
 \begin{itemize}
 \item It was to be a deep neural network (i.e. at least one hidden layer of neurons),
 \item The layer debth was to remain the same throughout the network,
-\item Sufficient padding was to be added to the convolving layers so that the breadth of the intermediary values remained the same (the 700 amino acids, that is),
+\item Sufficient padding was to be added to the convolving layers so that the breadth of the intermediary values remained the same (the 700 amino acids),
 \item After each layer, save the last, the layer was activated using a rectified linear unit,
 \item The model should not itself contain a SoftMaxing layer, since this was built into the loss function,
 \item The model was evaluated and optimized based on the output of a Cross Entropy loss function,
@@ -228,14 +220,10 @@ The basic structure of the model remained unchanged throughout these test. The b
 \end{Figure}
 
 \subsubsection{Accuracy}
-Having built a network that was training and improving on the training set data, it was also relevant evaluate the accuracy of the predictions of the network in addition to the calculation of loss on the validation set.
-
-Several approaches to evaluating predictions exist. The output of our model was something of a proxy to a probability distribution, however not a true probability distribution since the model itself did not perform a SoftMax on the output. This was however not an issue, since the index of the largest value in a set of values remains the same before and after being SoftMaxed, and we could thus safely treat the index of the largest value in the un-SoftMaxed output as the label of the prediction.
-
-In implementing a procedure to evaluate the accuracy of a prediction, we first collapse the output distribution as just described, and then produce a matrix of indicators as to whether the predicted label matched the label in the matrix of actual secondary structure labels as provided by the database.
-
-Of course at this point the model would also be evaluated on its accurate prediction of padding (a task that proved remarkably managable), and thus could achieve arbitrarily high accuracy just by adding more padding to the set. To avoid this, we construct a masking matrix from the values in the target set that are \texttt{NoSeq}. We can then use this mask to filter out the irrelevant values in our matrix of correct and false predictions.
-
+Having built a network that was training and improving on the training set data, it was also relevant to evaluate the accuracy of the predictions of the network in addition to the calculation of loss on the validation set.\\
+Several approaches to evaluating predictions exist. The output of our model was something of a proxy to a probability distribution, however not a true probability distribution since the model itself did not perform a SoftMax on the output. This was not an issue since the index of the largest value in a set of values remains the same before and after being SoftMaxed, and we could thus safely treat the index of the largest value in the un-SoftMaxed output as the label of the prediction.\\
+In implementing a procedure to evaluate the accuracy of a prediction, we first collapse the output distribution as just described, and then produce a matrix of indicators as to whether the predicted label matched the label in the matrix of actual secondary structure labels as provided by the database.\\
+Of course at this point the model would also be evaluated on its accurate prediction of padding (a task that proved remarkably managable), and thus could achieve arbitrarily high accuracy just by adding more padding to the set. To avoid this, we construct a masking matrix from the values in the target set that are \texttt{NoSeq}. We then use this mask to filter out the irrelevant values in our matrix of correct and false predictions.\\
 Finally taking the mean of this, now filtered, matrix of prediction correctness produces the percentage of the relevant predictions that were in fact correct.
 \begin{Figure}
  \centering
