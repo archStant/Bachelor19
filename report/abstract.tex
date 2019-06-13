@@ -1,10 +1,10 @@
 %\section*{Abstract}
 \begin{abstract}
 \noindent In this paper we explore the theory underlying proteins and features of the amino acids they are comprised of, exploring aspects such as secondary protein structures and solvent accessibility.\\
-We then delve into the theory behind artificial neural networks, deliberating basic subjects such as the structure of neural networks and \textit{backprobagation}, as well as explaining the extentions to this concept called \textit{convolutional neural networks} and \textit{multi-task learning}.\\
+We then delve into the theory behind artificial neural networks, deliberating basic subjects such as the structure of neural networks and \textit{backpropagation}, as well as explaining the extensions to this concept called \textit{convolutional neural networks} and \textit{multi-task learning}.\\
 We then introduce a dataset originally produced by \citeauthor{zhou-and-troyanskaya-2014} (2014) extracted from the PISCES CullPDB database \citep{wang-2003}, which we use to test whether implementing multi-task learning in convolutional neural networks help improving the network capability to predict protein secondary structures from amino acid sequences and sequence profiles.\\
 We test this by implementing two models, similar to each other apart from the fact that the second one also trains on predicting amino acid solvent accessibility, thus being a multi-task neural network.\\
-The results we optain from this are that at the peak of their training, the single-task model predicts Q8 secondary structures with an accuracy of 71.24\%, while the multi-task model has an accuracy of 71.81\%.\\
-Seing as the predictive capabilities rose with 0.57\%, we argue that if one was to implement multi-task learning in other models that have already showed better performance than our (such as the DeepCNF-SS \citep{wang-et-al-2016} hitting an accuracy of 75,2\%), these models might as well see an increase in performance.\\
+The results we obtain from this are that at the peak of their training, the single-task model predicts Q8 secondary structures with an accuracy of 71.24\%, while the multi-task model has an accuracy of 71.81\%.\\
+Seeing as the predictive capabilities rose with 0.57\%, we argue that if one was to implement multi-task learning in other models that have already showed better performance than our (such as the DeepCNF-SS \citep{wang-et-al-2016} hitting an accuracy of 75,2\%), these models might as well see an increase in performance.\\
 Finally we argue that our own models could possible be improved by adding elements such as different batch-sizes, more evaluations of hyperparameters or k-fold cross validation.
 \end{abstract}

@@ -1,12 +1,12 @@
 \end{multicols}
 \section{Results}
-In our optimization of the model we iterated over the hyperparemeters in the order: No. of layers, learning rate, debth of layers and kernel size. For each hyperparameter we adjusted the value and allowed the multi-task model to train for 10 epochs and then evaluate accuracy of both the Q8 secondary structure prediction as well as the relative and absolute solvent accessibiliy on both the validation and test set.\\
+In our optimization of the model we iterated over the hyperparameters in the order: No. of layers, learning rate, depth of layers and kernel size. For each hyperparameter we adjusted the value and allowed the multi-task model to train for 10 epochs and then evaluate accuracy of both the Q8 secondary structure prediction as well as the relative and absolute solvent accessibility on both the validation and test set.\\
 In choosing which values to continue with for the final model we only considered results on the validation set, and attempted to balance accuracy with model size and trainability.\\
 Once we had found what configurations performed the best on the respective parameters, we trained both our single- and multi-task models with these parameters for 20 epochs and compared the results.
 
 \subsection{Hyperparameters}
 \subsubsection{No. of layers}
-Variying the number of layers in the model greatly affects the size of the model and thus also the time taken to train it. Further, adding more layers increases the models capacity. The higher capacity the more complex task can be solved. Too hgih capacity on the other hand, and the risk of overfitting rises.\citep[p. 110]{goodfellow-et-al-2016}\\
+Varying the number of layers in the model greatly affects the size of the model and thus also the time taken to train it. Further, adding more layers increases the models capacity. The higher capacity the more complex task can be solved. Too high capacity on the other hand, and the risk of overfitting rises.\citep[p. 110]{goodfellow-et-al-2016}\\
 In our tests we evaluated from two to five hidden layers. Note, that the output layer is not counted in this number.
 
 % Please add the following required packages to your document preamble:
@@ -123,7 +123,7 @@ While the first tests focus on keeping the same size of kernel throughout the la
 \end{figure}
 
 \noindent As with the layer depth, not all values are shown in the graph - refer to the appendix for a graph with all values.\\
-It became clear that having optimized most of our hyperparamters, further improving accuracy for Q8 predictions became increasingly difficult, and the improvements smaller for every hyperparamter optimized. Here doing the last optimization of hyperparamters, using a progressively rising size of kernels gave us the most significant increase in accuracy of Q8 prediction, only comparable to a steady kernel size of 7 or 9. For the final model we therefore opted to use kernel sizes [5, 7, 9, 11].\\
+It became clear that having optimized most of our hyperparameter, further improving accuracy for Q8 predictions became increasingly difficult, and the improvements smaller for every hyperparameter optimized. Here doing the last optimization of hyperparameters, using a progressively rising size of kernels gave us the most significant increase in accuracy of Q8 prediction, only comparable to a steady kernel size of 7 or 9. For the final model we therefore opted to use kernel sizes [5, 7, 9, 11].\\
 What is interesting about the data shown above, is that while one would expect larger kernel sizes to increase performance, or at the very least not decrease it (since the model should learn just to 'ignore' extra space in the kernel), the model's performance did indeed decrease as the kernel sizes grew.
 
 

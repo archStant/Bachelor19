@@ -5,13 +5,13 @@
 The \texttt{PISCES Cull PDB} database server \citep{wang-2003} is a commonly used source for data for evaluating 
 machine learning models trained to predict protein secondary structures.\\
 In training our model, we have used the data set produced by \cite{zhou-and-troyanskaya-2014}, originally extracted from the PISCES server.\\
-The data contains information on 5926 proteins. \citeauthor{zhou-and-troyanskaya-2014} have filtered the data such that it contains no proteins consisting of less than 50 or more than 700 amino acids, and have thus encoded each protein as a section of 700 amino acids, the non-existant ones (in the case of a protein of less than 700 amino acids) being marked as \texttt{Not Sequenced}.
+The data contains information on 5926 proteins. \citeauthor{zhou-and-troyanskaya-2014} have filtered the data such that it contains no proteins consisting of less than 50 or more than 700 amino acids, and have thus encoded each protein as a section of 700 amino acids, the non-existent ones (in the case of a protein of less than 700 amino acids) being marked as \texttt{Not Sequenced}.
 
 \subsubsection{Features}
 Each amino acid in the database contains 57 features (or channels) of information. The first 22 features encode which of the 20 amino acids that occur in genetic code, plus amino acid 'X' representing 'Unknown' as well as 'NoSeq'.\\
 \\
 This information is encoded in a one-hot format, meaning that instead of encoding the actual amino acid or the index of the acid, one encodes an array of zeros with only the element at the index of the number of the amino acid being set to one. So in order to encode Glutamic acid (E) i.e. the third amino acid, the one-hotted data would be $[0, 0, 1, 0, 0, ... , 0, 0]$. \\
-Encoding the data in this way makes very good sence in regard to training classifiers, as if one was to encode amino acid E simply as the number 3 (E being the third amino acid), the classifier would falsely train on the premise that a guess of 4 was a less bad guess than a guess of 15, based on the proximity of the indices.\\
+Encoding the data in this way makes very good sense in regard to training classifiers, as if one was to encode amino acid E simply as the number 3 (E being the third amino acid), the classifier would falsely train on the premise that a guess of 4 was a less bad guess than a guess of 15, based on the proximity of the indices.\\
 The secondary structure labels that the model attempts to predict are encoded in the same manner, however for training purposes we have collapsed them into indices in our model. Further, as explained above, there are three main forms of protein secondary structures (H, B, and C) and within them there are further 8 sub-forms of structures, as seen in  the Q8 table, which are the ones that are encoded in the dataset.
 
 \end{multicols}
@@ -68,7 +68,7 @@ Possibly the simplest of these activation functions is the rectifier, which when
 \[
 ReLU(x) = x^+ = max(0,x)
 \]
-\noindent Using ReLUs in artificial neural networks makes for easier optimizations due to the fact that its derivatives remain large as well as consistent when the unit is active\citep[p. 193]{goodfellow-et-al-2016}.\\
+\noindent Using ReLUs in artificial neural networks makes for easier optimization due to the fact that its derivatives remain large as well as consistent when the unit is active\citep[p. 189]{goodfellow-et-al-2016}.\\
 As \citeauthor{goodfellow-et-al-2016} states: "Because rectified linear units are nearly linear, they preserve many of the properties that make linear models easy to optimize with gradient-
 based methods. They also preserve many of the properties that make linear models generalize well."\citep[p. 170]{goodfellow-et-al-2016} Furthermore, they state that ReLU is the recommended activation function for most feedforward neural networks\citep[p. 170]{goodfellow-et-al-2016}.
 
@@ -132,13 +132,13 @@ Thus, given two probability distributions \textit{m} and \textit{n} predicting t
 $$L ( m , n ) = - \sum _ { z \in \mathcal { Z } } m ( z ) \log n ( z )$$
 A specific instance of the cross entropy loss is the \textit{binary cross entropy loss}, which is useful in cases where the possible outcome is binary (i.e. there are only two possible outcomes). 
 \\
-Seing as the aim of this paper was to train our network to perform classifications first on amino acid secondary structures (of which there are eight) and then relative and absolute solvent accessibility (which are both encoded as either ones or zeros), we have used Cross Entropy Loss on the former and Binary Cross Entropy Loss on the two latter.
+Seeing as the aim of this paper was to train our network to perform classifications first on amino acid secondary structures (of which there are eight) and then relative and absolute solvent accessibility (which are both encoded as either ones or zeros), we have used Cross Entropy Loss on the former and Binary Cross Entropy Loss on the two latter.
 
 
 \paragraph{Optimization algorithm}
 Several choices exist for the choice of optimization algorithm. One simple algorithm would be Stochastic gradient descent, in which there is one learning rate that applies to all model parameters (weights) and does not change throughout training.\\
-Other optimizations such as Adabtive Gradient Algorithm (AdaGrad) maintains a learning rate for each parameter in the model, while algorithms such as the Root Mean Square Propagation (RMSProp) algorithm continuously adjusts the learning rate in accordance to the average magnitude in recent gradients.\\
-In this project we have opted to use the Adam optimizer, introduced by \citeauthor{Adam} no more than four years ago. This optimizer combines two of the above aspects, namely individual learning rates for each parameter and continous evaluation of the learning rates. However while RMSProp only evaluates the learning rate in response to the mean magnitude of gradients, Adam also evaluates on the variance of recent gradients.\\
+Other optimizations such as Adaptive Gradient Algorithm (AdaGrad) maintains a learning rate for each parameter in the model, while algorithms such as the Root Mean Square Propagation (RMSProp) algorithm continuously adjusts the learning rate in accordance to the average magnitude in recent gradients.\\
+In this project we have opted to use the Adam optimizer, introduced by \citeauthor{Adam} no more than four years ago. This optimizer combines two of the above aspects, namely individual learning rates for each parameter and continuous evaluation of the learning rates. However while RMSProp only evaluates the learning rate in response to the mean magnitude of gradients, Adam also evaluates on the variance of recent gradients.\\
 To do this, \citeauthor{Adam} writes that the Adam optimizer has four configuration parameters: 
 \begin{itemize}
 \item $\alpha$: The initial learning rate,
@@ -158,7 +158,7 @@ The strength in using PyTorch stems from several aspects:
 \paragraph{GPU support}
 PyTorch provides a strong framework for performing calculations on a graphical processing unit rather than the computer's CPU. While GPUs are valued in video game circles, they are also useful for performing machine learning tasks, since these are often tasks that involve a high number of calculations that can be performed in parallel. For this, a GPU is preferred over a CPU since they often have a much higher number of cores, and are thus better suited for parallel programming. Indeed in our case, there was a factor of 20 difference in the time needed to train an epoch between doing it on the CPU versus the GPU.
 \paragraph{Tensors}
-The main data structure used in the PyTorch framework is tensors. Where a vector is a 1-dimensional array and a matrix a 2-dimensional array, a tensor is a multi-dimensional array. This means they can be 1-, 2-, 3- or even 42-dimensional arrays. As such tensors subsume scalars, vectors and matrices. (KILDE ER DEEPLEARNING BOGEN p 211). Tensors in PyTorch are multi-dimensional arrays much like the ones implemented in numpy, but with the option to place them on the GPU rather than the CPU.
+The main data structure used in the PyTorch framework is tensors. Where a vector is a 1-dimensional array and a matrix a 2-dimensional array, a tensor is a multi-dimensional array. This means they can be 1-, 2-, 3- or even 42-dimensional arrays. As such tensors subsume scalars, vectors and matrices \citep[p. 211]{goodfellow-et-al-2016}. Tensors in PyTorch are multi-dimensional arrays much like the ones implemented in numpy, but with the option to place them on the GPU rather than the CPU.
 \paragraph{Automatic differentiation}
 In order to utilize the backpropagation that lets neural networks train and improve, the loss must be differentiated in regards to all of the weights and values in the model in order to calculate the gradients. This can be a cumbersome task when performed by hand, but PyTorch provides a powerful tool for this in the \texttt{autograd} and \texttt{optim} modules. The first of these modules keeps track of which computations were performed on which variables in order to arrive at the final value of a variable, so that it can be retraced backwards in the end to calculate gradients, while the latter contains ready-made implementations of several optimization algorithms (among them Adam), which automatically adjusts the weights and values in the model according to the calculated gradient and a supplied learning rate.\\
 These things combined allow a training step for a neural network to be performed in as few steps as shown below:
@@ -204,7 +204,7 @@ We built a convolutional neural network, implemented using PyTorch in order to p
 The basic structure of the model remained unchanged throughout these test. The basics of the structure was comprised of following elements:
 \begin{itemize}
 \item It was to be a deep neural network (i.e. at least one hidden layer of neurons),
-\item The layer debth was to remain the same throughout the network,
+\item The layer depth was to remain the same throughout the network,
 \item Sufficient padding was to be added to the convolving layers so that the breadth of the intermediary values remained the same (the 700 amino acids),
 \item After each layer, save the last, the layer was activated using a rectified linear unit,
 \item The model should not itself contain a SoftMaxing layer, since this was built into the loss function,
@@ -223,7 +223,7 @@ The basic structure of the model remained unchanged throughout these test. The b
 Having built a network that was training and improving on the training set data, it was also relevant to evaluate the accuracy of the predictions of the network in addition to the calculation of loss on the validation set.\\
 Several approaches to evaluating predictions exist. The output of our model was something of a proxy to a probability distribution, however not a true probability distribution since the model itself did not perform a SoftMax on the output. This was not an issue since the index of the largest value in a set of values remains the same before and after being SoftMaxed, and we could thus safely treat the index of the largest value in the un-SoftMaxed output as the label of the prediction.\\
 In implementing a procedure to evaluate the accuracy of a prediction, we first collapse the output distribution as just described, and then produce a matrix of indicators as to whether the predicted label matched the label in the matrix of actual secondary structure labels as provided by the database.\\
-Of course at this point the model would also be evaluated on its accurate prediction of padding (a task that proved remarkably managable), and thus could achieve arbitrarily high accuracy just by adding more padding to the set. To avoid this, we construct a masking matrix from the values in the target set that are \texttt{NoSeq}. We then use this mask to filter out the irrelevant values in our matrix of correct and false predictions.\\
+Of course at this point the model would also be evaluated on its accurate prediction of padding (a task that proved remarkably manageable), and thus could achieve arbitrarily high accuracy just by adding more padding to the set. To avoid this, we construct a masking matrix from the values in the target set that are \texttt{NoSeq}. We then use this mask to filter out the irrelevant values in our matrix of correct and false predictions.\\
 Finally taking the mean of this, now filtered, matrix of prediction correctness produces the percentage of the relevant predictions that were in fact correct.
 \begin{Figure}
  \centering
@@ -236,11 +236,11 @@ Finally taking the mean of this, now filtered, matrix of prediction correctness 
 For comparison purposes, we also implemented a convolutional neural network to predict the two solvent accessibility features alone. This model is in most regards similar to the above, only with fewer output-channels and different final activation and loss functions.\\
 One could think of the types of these three (structures, relative and absolute solvency) output as identical; the structure labels are a probability distribution while in a certain sense so are the solvent accessibility features - only a probability between two possible outcomes.\\
 Nonetheless different final activation function were needed for the two latter, since performing a softmax on the binary output would always yield a 1. Thus the two solvent features are activated by a sigmoid function - effectively mapping their value to a probability between 0 and 1. Further, the loss function, now only distinguishing between two possible classes (0 and 1) should be the Binary Cross Entropy.\\
-rom a technical implementational perspective, as how in the previous model the SoftMax function was already included in the PyTorch implementation of BCELoss, in this case the sigmoid function is not explicitly stated in the model, as it is already included in the PyTorch module \texttt{BCEWithLogitsLoss} - the Binary Cross Entropy loss function.
+From a technical implementational perspective, as how in the previous model the SoftMax function was already included in the PyTorch implementation of BCELoss, in this case the sigmoid function is not explicitly stated in the model, as it is already included in the PyTorch module \texttt{BCEWithLogitsLoss} - the Binary Cross Entropy loss function.
 
 \subsection{Multi-task learning}
 %\subsubsection{Generelt om Multi-task learning}
-There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers. This approach provides a very strong line of defence against overfitting, as forcing the model to optimize on several predictive capabilities makes it less  susceptible to representing the aspects of the training data that are not representative of general tendencies in the domain. 
+There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers. This approach provides a very strong line of defense against overfitting, as forcing the model to optimize on several predictive capabilities makes it less  susceptible to representing the aspects of the training data that are not representative of general tendencies in the domain. 
 
 In contrast to this stands soft parameter sharing, in which one could say that the model is comprised of a series of sub-models, each containing their own distinct layers and oriented towards each their prediction task. In this case the parameters of each of the models are balanced and regularized against each other in order to make them as similar as possible.
 
@@ -258,7 +258,7 @@ Having decided on employing hard parameter sharing, we implemented the model in 
 \end{Figure}
 
 \subsubsection{Training}
-Utilizing the PyTorch loss function, autogradient and optimizer-libraries, implementing a model with essentially three losses is easy. As mentioned above, the model had a Cross Entropy loss for the secondary structure prediction, as well as two Binary Cross Entropy losses for the two solvency features. Training the model with regards to minimizing these losses is acheived simply by letting a variable be the sum of the three, and then letting the library automatically backtrace each of the parameters in the model via this value.
+Utilizing the PyTorch loss function, autogradient and optimizer-libraries, implementing a model with essentially three losses is easy. As mentioned above, the model had a Cross Entropy loss for the secondary structure prediction, as well as two Binary Cross Entropy losses for the two solvency features. Training the model with regards to minimizing these losses is achieved simply by letting a variable be the sum of the three, and then letting the library automatically backtrace each of the parameters in the model via this value.
 \begin{lstlisting}
 # Calculate losses
 loss1 = loss_func_structure(calc_struct,  correct_struct)
@@ -276,12 +276,12 @@ optimizer.step()
 
 \subsubsection{Accuracy}
 Evaluating the accuracy of the model's predictions happens for each of the three features being predicted in the model.\\
-The accuracy of the secondary structure label prediction happens in a similar fashion to the one in the single-task model. Seing as we know the structure of the solvent accessibility features to be binary and independent (an amino acid can be relatively solvent while not absolutely solvent and vica-versa), we can, after manually applying a sigmoid function on them, employ a simple round function to convert the probability outputted by the model to a binary prediction.\\
+The accuracy of the secondary structure label prediction happens in a similar fashion to the one in the single-task model. Seing as we know the structure of the solvent accessibility features to be binary and independent (an amino acid can be relatively solvent while not absolutely solvent and vice-versa), we can, after manually applying a sigmoid function on them, employ a simple round function to convert the probability outputted by the model to a binary prediction.\\
 Having done so, the same method of constructing a matrix of correct and false predictions and then filtering this matrix by the mask already derived from the secondary structures was used.
 
 
 \subsection{Hyperparameters}
-In order to optimize our two models we iterated over a series of settings that helps control the learning algorithms behaviour for the model. Those are the models' hyperparameters.
+In order to optimize our two models we iterated over a series of settings that helps control the learning algorithms behavior for the model. Those are the models' hyperparameters.
 The hyperparameters of a model are not changed or learned by the model itself, but rather changed manually by us. As mentioned earlier, this is one of the purposes of a validation set. 
 When finishing a training session on a model, we evaluate it against the validation set, and then change its hyperparameters to improve accuracy or counter overfitting. Not until satisfied with the parameters, and after training the final model, does one use the test set. \citep{goodfellow-et-al-2016} In our Convolutional Neural Network, the hyperparameters are: the number of layers, the depth of the layers, the learning rate and the size of the kernels used in the convolutions, as well as to a certain extend the batch size. The reason we have this reservation, is we could not freely change the batch size due to hardware limitations.\\
 For a starting point, we chose to adapt the values used by \citeauthor{wang-et-al-2016}, and then iterated to both sides of those values.\\
@@ -304,7 +304,7 @@ Batch gradient was not an option for us, for the simple practical reason that th
 A test of accuracy over different batch sizes can be found in the appendix.\\
 \\
 When deciding on which hyperparameters to optimize and which not to, we decided to do tests and optimize the initial learning rate supplied to the Adam optimization algorithm, but not to try different values of the other three hyperparameters this algorithm takes. These are the $\beta_1, \beta_2$ and $\epsilon$ parameters, the first two of which control how quickly the learning rate falls as a product of the mean and variance of recent gradients, and the latter being a very small security measure to avoid divisions by zero. This decision was made on the grounds that in the original paper presenting the Adam algorithm, authors \citeauthor{Adam} declare that "Good default settings for the tested machine learning problems are: [...] $\beta_1 = 0.9$, $\beta_2 = 0.999$ and $\epsilon = 10^{-8}$" \citep[p. 2]{Adam}.\\
-As these values are also the default values when instantiating an Adam optimizer opject in PyTorch, they have not been specified in the code.
+As these values are also the default values when instantiating an Adam optimizer object in PyTorch, they have not been specified in the code.
 
 
 

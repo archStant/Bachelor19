@@ -62,11 +62,11 @@ C (coil)	& I, S, T, L				\\
 \end{table}
 
 \section*{Batch sizes}
-A comparison of acheived accuracies on the validation and test set respectively performed on the unoptimized multi-task model can be seen below.
+A comparison of achieved accuracies on the validation and test set respectively performed on the unoptimized multi-task model can be seen below.
 \begin{table}[H]
 \centering
 \begin{tabular}{lllllll}
-\multicolumn{7}{c}{Layer debth = 80, kernel size = 11, learning rate = 0.00025, 3 hidden layers}                                                                                                                                                                                                                                                                                   \\ \hline
+\multicolumn{7}{c}{Layer depth = 80, kernel size = 11, learning rate = 0.00025, 3 hidden layers}                                                                                                                                                                                                                                                                                   \\ \hline
            & \multicolumn{3}{c|}{Validation set}                                                                                                                                                               & \multicolumn{3}{c}{Test set}                                                                                                                                      \\ \hline
 Batch size & Q8 & \begin{tabular}[c]{@{}l@{}}Relative\\solvent\\accessibility\end{tabular} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Absolute\\solvent\\accessibility\end{tabular}} & Q8 & \begin{tabular}[c]{@{}l@{}}Relative\\ solvent\\ accessibility\end{tabular} & \begin{tabular}[c]{@{}l@{}}Absolute\\ solvent\\accessibility\end{tabular} \\ \hline
 1          & 71.25\%     & 82.98\%                                                                       & \multicolumn{1}{l|}{81.41\%}                                                                       & 70.973\%    & 82.184\%                                                                   & 80.572\%                                                                \\
