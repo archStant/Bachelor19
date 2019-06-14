@@ -10,7 +10,7 @@ The data contains information on 5926 proteins. \citeauthor{zhou-and-troyanskaya
 \subsubsection{Features}
 Each amino acid in the database contains 57 features (or channels) of information. The first 22 features encode which of the 20 amino acids that occur in genetic code, plus amino acid 'X' representing 'Unknown' as well as 'NoSeq'.\\
 \\
-This information is encoded in a one-hot format, meaning that instead of encoding the actual amino acid or the index of the acid, one encodes an array of zeros with only the element at the index of the number of the amino acid being set to one. So in order to encode Glutamic acid (E) i.e. the third amino acid, the one-hotted data would be $[0, 0, 1, 0, 0, ... , 0, 0]$. \\
+This information is encoded in a one-hot format, meaning that instead of encoding the actual amino acid or the index of the acid, one encodes an array of zeros with only the element at the index of the number of the amino acid being set to one. So in order to encode Glutamic acid (E) i.e. the third\footnote{Interestingly, E is the third amino acid in the data set, even though it is the fourth amino acid if counting alphabetically. Refer to table 3 in the appendix for an alphabetically sorted list of amino acids.} amino acid, the one-hotted data would be $[0, 0, 1, 0, 0, ... , 0, 0]$. \\
 Encoding the data in this way makes very good sense in regard to training classifiers, as if one was to encode amino acid E simply as the number 3 (E being the third amino acid), the classifier would falsely train on the premise that a guess of 4 was a less bad guess than a guess of 15, based on the proximity of the indices.\\
 The secondary structure labels that the model attempts to predict are encoded in the same manner, however for training purposes we have collapsed them into indices in our model. Further, as explained above, there are three main forms of protein secondary structures (H, B, and C) and within them there are further 8 sub-forms of structures, as seen in  the Q8 table, which are the ones that are encoded in the dataset.
 
@@ -148,7 +148,7 @@ To do this, \citeauthor{Adam} writes that the Adam optimizer has four configurat
 \end{itemize}
 In the section 'Which optimizer to use?' of his 2016 article "An overview of gradient descent optimization algorithms" author \citeauthor{Ruder16} writes:
 
-\textit{"Insofar, RMSprop, Adadelta, and Adam are very similar algorithms that do well in similar circumstances. \citeauthor{Adam} show its bias-correction helps Adam slightly outperform RMSprop towards the end of optimization as gradients become sparser. Insofar, Adam might be the best overall choice."}\\
+"Insofar, RMSprop, Adadelta, and Adam are very similar algorithms that do well in similar circumstances. \citeauthor{Adam} show its bias-correction helps Adam slightly outperform RMSprop towards the end of optimization as gradients become sparser. Insofar, Adam might be the best overall choice."\\
 In this project we have chosen to follow the advice of \citeauthor{Ruder16} and use the Adam optimization algorithm.
 
 \subsubsection{Technological implementation details}
@@ -240,10 +240,8 @@ From a technical implementational perspective, as how in the previous model the 
 
 \subsection{Multi-task learning}
 %\subsubsection{Generelt om Multi-task learning}
-There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers. This approach provides a very strong line of defense against overfitting, as forcing the model to optimize on several predictive capabilities makes it less  susceptible to representing the aspects of the training data that are not representative of general tendencies in the domain. 
-
-In contrast to this stands soft parameter sharing, in which one could say that the model is comprised of a series of sub-models, each containing their own distinct layers and oriented towards each their prediction task. In this case the parameters of each of the models are balanced and regularized against each other in order to make them as similar as possible.
-
+There are multiple ways of implementing multi-task learning in artificial neural networks. The most basic distinction is between implementing the network using soft or hard parameter sharing. In the case of hard parameter sharing, the input data gets transformed through a number of layers in its entirety only then to be split into distinguishable output sets, and then optionally go through further set-specific layers. This approach provides a very strong line of defense against overfitting, as forcing the model to optimize on several predictive capabilities makes it less  susceptible to representing the aspects of the training data that are not representative of general tendencies in the domain. \\
+In contrast to this stands soft parameter sharing, in which one could say that the model is comprised of a series of sub-models, each containing their own distinct layers and oriented towards each their prediction task. In this case the parameters of each of the models are balanced and regularized against each other in order to make them as similar as possible. \citep{ruder-2017}\\
 On the grounds that the data set we are working with is somewhat limited (5926 proteins out of some 400.000 in the original PDB database) we were concerned about possible overfitting, and thus opted to implement our multi-task learning network with hard parameter sharing.
 
 \subsubsection{Architecture}

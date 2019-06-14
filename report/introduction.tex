@@ -15,14 +15,14 @@ In computer science today, one of the areas of research that is publicly debated
 This paper's purpose is threefold. The first is to give an introductory understanding of the topic of machine learning and more specifically neural networks. This includes a basic understanding of the theoretical basis of neural networks. \\
 The second purpose is to widen this understanding of neural networks by implementing one to handle a specific task. This task is to predict secondary structure of proteins based on their amino acid composition. Lastly the purpose is to give a rudimentary understanding of what proteins and their composites are, to give context to the use of the neural network.\\
 The motivation for choosing protein secondary structure prediction for the neural networks also has several reasons. \\
-Protein secondary structure prediction has many real world applications and is an important branch of bioinformatics today, as it is used in both medicine, biotechnology and research into diseases such as Alzheimer's. \\
+Protein secondary structure prediction has many real world applications and is an important branch of bioinformatics today, as it is used in both medicine, biotechnology and research into diseases such as Alzheimer's. \citep[p. 113]{BrandenCarl1991Itps}\\
 Improving predictive capabilities in regards to protein secondary structure is, at the time of writing, a very active area of research. As such it gives a contemporary and relevant context for this paper as an interesting introduction to neural networks and their application.   
 A common example when learning about neural networks and implementing them is to identify a handwritten number between 0 and 9. This neural network is often trained on the MNIST dataset of handwritten numbers. \\
 We will use the MNIST dataset of numbers to explain some of the basics of neural networks. 
 
 
 \subsection{Proteins}
-Proteins are large bio-molecules that serve a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. KILDEKILDEKILDE!!. They consist of chains of amino acids, the sequence of which determine the type of the protein. The linear sequence of amino acids in a protein is also known as a protein's primary structure. 
+Proteins are large bio-molecules that serve a wide range of functions in organisms. Those functions includes giving structure to cells, being part of DNA replication and responding to stimuli. They consist of chains of amino acids, the sequence of which determine the type of the protein. The linear sequence of amino acids in a protein is also known as a protein's primary structure. \cite{BrandenCarl1991Itps}
 
 \subsubsection{Secondary Structures}
 The secondary structures are the three-dimensional forms a protein can take in a local segment and are largely determined by its primary structure. There exists many reasons for research into predicting the secondary structure. One of these is using it as a stepping stone for trying to find the three-dimensional tertiary structure of a protein (which is normally difficult to assess). The secondary structure itself is the three-dimensional form of local segments of the protein \citep[p.~2]{qi-et-al-2012}.
@@ -48,6 +48,7 @@ L	& loop								\\
 \noindent The accuracy for current state of the art when predicting Q8 secondary structure is around 72-76\% \citep{zhou-and-troyanskaya-2014, qi-et-al-2012, wang-et-al-2016}. \\
 When predicting Q3 secondary structures the accuracy percentage of the current state of the art lies in the mid eighties. This was for a long time the main focus of research in secondary structure prediction, but due to recent advances in technology and research, the harder but more specific Q8 predictions are gaining more attention. 
 Again using the DSSP alphabet for giving letters, the groups of Q3 are as in the Q3 table \citep{qi-et-al-2012}.
+
 \begin{table}[H]
 \caption{Q3 structure overview}
 \centering
@@ -60,9 +61,17 @@ C (coil)	    & I, S, T, L				\\
 \end{tabular}
 \end{table}
 
+\end{multicols}
+\begin{Figure}
+ \centering
+ \includegraphics[width=0.8\linewidth]{images/protein_structure}
+ \captionsetup{width=0.8\linewidth, font=small}
+ \captionof{figure}{Levels of protein structure. \citep{BrandenCarl1991Itps}}
+\end{Figure}
+\begin{multicols}{2}
 
 \subsubsection{Solvent accessible surface area}
-Another feature of proteins this paper shall examine, is amino acid solvent accessible surface area. This solvency is a measure of whether or not it can be absolved by water. Among other things this is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. \\
+Another feature of proteins this paper shall examine, is amino acid solvent accessible surface area. This solvency is a measure of whether or not it can be absolved by water. Among other things this is determined by whether or not the acid is deep inside the protein or close to the surface of the protein. \citep[p. 3]{qi-et-al-2012}\\
 This shall serve as the secondary task for the implementation of a multi-task learning model.
 
 \subsection{Neural networks}
@@ -79,26 +88,26 @@ synapses. Neurons in turn are so-called electrically excitable cells. In a gross
 %  \caption{Neurons in the dentate gyrus of an epilepsy patient.}
 %\end{figure}
 
+\noindent While obviously interesting within the fields of biology or psychology, this structure has shown 
+to be useful in the field of computation, as one can in fact model this very 
+thing and use it to make predictions based on prior observations, for example in regards to the 
+aforementioned structures of proteins folding.\\
 \begin{Figure}
  \centering
  \includegraphics[width=0.8\linewidth]{images/Gyrus_Dentatus_40x}
  \captionsetup{width=0.8\linewidth, font=small}
  \captionof{figure}{Neurons in the dentate gyrus of an epilepsy patient.}
 \end{Figure}
-
-\noindent While obviously interesting within the fields of biology or psychology, this structure has shown 
-to be useful in the field of computation, as one can in fact model this very 
-thing and use it to make predictions based on prior observations, for example in regards to the 
-aforementioned structures of proteins folding.\\
-Analogously, or rather digitally, we can use this model to construct an \textit{artificial 
+\noindent Analogously, or rather digitally, we can use this model to construct an \textit{artificial 
 neural network}.
-These set themselves apart from biological neural networks in a couple of ways: neurons in biological neural networks are connected to each other via synapses. Each neuron has an either inhibitory or activating effect on whether or not a connected neuron 'fires'.\\
-In contrast to this, artificial neural networks' neurons are connected by \textit{edges}, each with an associated \textit{weight}, allowing the artificial networks to leave the discrete domain and enter the continuous.
+These set themselves apart from biological neural networks in a couple of ways. \\
+In biological neural networks neurons are connected to each other via synapses. In this way, each neuron has an either inhibitory or activating effect on whether or not a connected neuron 'fires'.\\
+In contrast to this, artificial neural networks' neurons are connected by \textit{edges}, each with an associated (real number) \textit{weight}, allowing the artificial networks to leave the discrete domain and enter the continuous.
 
 \subsubsection{Basics}
 An artificial neural network is a specific instantiation of a \textit{multi-layer perceptron}.
 A multi-layer perceptron in turn is a system of nodes arranged into layers and each receiving their value from the value of the nodes in the layer before them (adjusted by some weight) in combination with a bias (a scalar) and an activation function of some sort. \\
-In this way the first layer will be called the \textit{input layer}, the last layer the \textit{output layer} and all layers in between \textit{hidden layers}. \\
+In this way the first layer will be called the \textit{input layer}, the last layer the \textit{output layer} and all layers in between \textit{hidden layers} \citep[p. 227]{bishop-2006}. \\
 In the case of neural networks, the nodes in the system are referred to as neurons.
 
 \begin{Figure}
@@ -134,7 +143,7 @@ In the case of neural networks, the nodes in the system are referred to as neuro
  \captionof{figure}{An extremely simple neural network.}
 \end{Figure}
 \noindent The neural network shown consists of two input neurons (red), one hidden layer of three neurons (green) and two output neurons(blue). The black edges between the neurons represent the weights and biases of the system.\\
-Thus, if one was to describe it more accurately, the value $z_i$ of neuron layer \textit{i} with \textit{d} number of neurons in it, given the matrix of sets of weights \textit{w} (the biases being the very first row) and the activation function $h()$ can be expressed as follows:
+Thus, if one was to describe it mathematically, the value $z_i$ of neuron layer \textit{i} with \textit{d} number of neurons in it, given the matrix of sets of weights \textit{w} (the biases being the very first row) and the activation function $h()$ can be expressed as follows:
 \[
 z_i = h\left(\sum_{j=0}^d w_{ij}\cdot z_{i-1} + w_{i0}\right)
 \]
@@ -156,13 +165,13 @@ Such a model is useful for calculating continuous values as well as for classifi
 
 \subsubsection{Training}
 Simply having defined the system of the neural network as above (denoted $f_{NN}$) naturally does not give a reliable method for classifying, as the accuracy of the prediction inherently depends on the correctness of the weights and biases of the system (denoted $\Theta$), which must be initialized with random values. \\
-Enter a concept named \textit{backpropagation}. Having a set of predicted values ($\hat{y}$) for a data set (\textit{x}) along with the observed correct values (\textit{y}), one can establish a \textit{loss} by applying a loss function (that we shall elaborate on later), but which can be as straightforward as a root mean square error. This loss function will be denoted $l(\hat{y},y)$, so that the  total loss of the system when applied to data set \textit{x} is $l(f_{NN}(\Theta, x), \hat{y})$.\\
+Enter a concept named \textit{backpropagation}. Having a set of predicted values ($\hat{y}$) for a data set (\textit{x}) along with the observed correct values (\textit{y}), one can establish a \textit{loss} by applying a loss function (that we shall elaborate on later), but which can be as straightforward as a root mean square error. This loss function will be denoted $l(\hat{y},y)$, so that the total loss of the system when applied to data set \textit{x} is $l(f_{NN}(\Theta, x), \hat{y})$. \citep[p. 241]{bishop-2006}\\
 Backpropagation refers to the practice of essentially taking the derivative of the loss function in regards to the matrix of weights and biases, thereby calculating a \textit{gradient} $\nabla{l(f_{NN}(\Theta, x), \hat{y})}$ of these values with respect to the accuracy of the system, and then adjusting the weights and biases by the gradient multiplied by a learning rate scalar.\\
 In layman's terms: by doing this one gets a matrix of "change your weights by this and that much in this and that direction to increase prediction accuracy".
 
 
 \subsubsection{Convolutional neural networks}
-Before introducing convolutional neural networks, a specification of what convolutions are is needed. The word convolution comes from the Latin convolvere, meaning to roll or to coil and still has a similar meaning in English today. In mathematics convolution is an operation where, for two functions $f(x)$ and $g(x)$, one is shifted across the other, resulting in a third function $h(x)$ that express the the intersection of the two functions. As such $h(x)$ explains how the shape of one of the functions is changed by the other. 
+Before introducing convolutional neural networks, a specification of what convolutions are is needed. The word convolution comes from the Latin convolvere, meaning to roll or to coil and still has a similar meaning in English today. In mathematics convolution is an operation where, for two functions $f(x)$ and $g(x)$, one is shifted across the other, resulting in a third function $h(x)$ that express the the intersection of the two functions. As such $h(x)$ explains how the shape of one of the functions is changed by the other. \citep[p. 267]{bishop-2006}
 However the more practical explanation in the case of our thesis, is that it is the resulting matrix of the product of a matrix and a filter. For example if one has the matrix $a$ and the filter $f$:
 \[
 a = \begin{bmatrix}
@@ -269,7 +278,7 @@ As can be seen on the above example there are several things to consider in rega
 In the example, zero padding would be adding zeros to the input matrix so it became a $4\times4$ matrix, so when when shifting the kernel across, the output would be the original $3\times3$. \\
 Of course the amount of padding needed also depends on the kernel size. Had the kernel been size $3\times3$, for the output matrix to be $3\times3$, it would have been necessary to pad zeros all around the original input matrix so it would be a $5\times5$ before convolution. \\
 Another parameter worth considering when doing convolution is what is called stride. In the above example it was shown how convolution started in the upper left corner of the matrix, then moved the kernel one step to the right, then down to the left and then to the right again. This was a stride of size 1. If the matrix had been a $6\times6$, and the kernel still was a size $2\times2$, convolving would still have started in the upper left corner, then moved one step to the right, then another, and then another, until the right side of the kernel had shifted to align with the right side of the matrix. It would then be moved one step down and all the way to the left again, only to continue one step at a time to the right once more. \\
-Had it been a stride of size 2 instead with a $6\times6$ input and a kernel of size $2\times2$, it would start in the upper left, then move 2 to the right instead of one, but otherwise follow the same pattern of movement. \\
+Had it been a stride of size 2 instead with a $6\times6$ input and a kernel of size $2\times2$, it would start in the upper left, then move 2 to the right instead of one, but otherwise follow the same pattern of movement. \citep[ch. 9]{goodfellow-et-al-2016} \\
 Manipulating stride, kernel size and padding allows for controlling the size of the intermediary and final layers of convolutional networks. This is useful for making sure that the shape of the output of a model actually matches the subject the model is supposed to predict.
 
 \subsubsection{Multi-task learning}

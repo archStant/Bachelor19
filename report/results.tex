@@ -1,4 +1,5 @@
 \end{multicols}
+\newpage
 \section{Results}
 In our optimization of the model we iterated over the hyperparameters in the order: No. of layers, learning rate, depth of layers and kernel size. For each hyperparameter we adjusted the value and allowed the multi-task model to train for 10 epochs and then evaluate accuracy of both the Q8 secondary structure prediction as well as the relative and absolute solvent accessibility on both the validation and test set.\\
 In choosing which values to continue with for the final model we only considered results on the validation set, and attempted to balance accuracy with model size and trainability.\\
@@ -242,7 +243,7 @@ Multi-task & 17 & \multicolumn{1}{l|}{71.666\%} & 12 & 71.810\%
 \noindent Again the effects of overfitting to the training data set is seen, however not to the same extent as was the case for the solvency features. \\
 One can observe that although the optimal accuracy for the two models did not differ enormously in the end, the multi-task learning model consistently performed better than the single-task during the majority of the training session.
 
-%\newpage
+\newpage
 \begin{multicols}{2}
 
 
